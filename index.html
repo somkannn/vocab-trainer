@@ -6,489 +6,546 @@
 <title>Vocab Trainer — A-Level · TGAT · TOEFL ITP</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --bg2: #f7f7f5;
-    --bg3: #f0f0ec;
-    --text: #1a1a1a;
-    --text2: #6b6b6b;
-    --text3: #a0a0a0;
-    --border: rgba(0,0,0,0.1);
-    --border2: rgba(0,0,0,0.18);
-    --green: #2d7a4f;
-    --green-bg: #edf7f1;
-    --red: #b83232;
-    --red-bg: #fdf0f0;
-    --blue: #1d5fa8;
-    --blue-bg: #eef4fc;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --bg:#ffffff;--bg2:#f7f7f5;--bg3:#efefeb;
+    --text:#1a1a1a;--text2:#6b6b6b;--text3:#aaa;
+    --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.18);
+    --green:#2d7a4f;--green-bg:#edf7f1;
+    --red:#b83232;--red-bg:#fdf0f0;
+    --blue:#1d5fa8;--blue-bg:#eef4fc;
+    --r:12px;--rs:8px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161616;
-      --bg2: #1f1f1f;
-      --bg3: #2a2a2a;
-      --text: #f0f0f0;
-      --text2: #a0a0a0;
-      --text3: #606060;
-      --border: rgba(255,255,255,0.1);
-      --border2: rgba(255,255,255,0.18);
-      --green: #4caf7d;
-      --green-bg: #0d2b1a;
-      --red: #e06060;
-      --red-bg: #2b0d0d;
-      --blue: #6aaef5;
-      --blue-bg: #0d1e33;
-    }
+  @media(prefers-color-scheme:dark){
+    :root{--bg:#161616;--bg2:#1f1f1f;--bg3:#2a2a2a;--text:#f0f0f0;--text2:#a0a0a0;--text3:#555;--border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.2);--green:#4caf7d;--green-bg:#0d2b1a;--red:#e06060;--red-bg:#2b0d0d;--blue:#6aaef5;--blue-bg:#0d1e33;}
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-  /* Layout */
-  .container { max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
-  .header { margin-bottom: 2rem; }
-  .logo { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
-  .logo span { color: var(--text2); font-weight: 400; }
-  .tagline { font-size: 13px; color: var(--text3); margin-top: 3px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .wrap{max-width:680px;margin:0 auto;padding:2rem 1.25rem 5rem;}
+  .logo{font-size:20px;font-weight:600;letter-spacing:-0.4px;}
+  .logo span{color:var(--text2);font-weight:400;}
+  .sub{font-size:12px;color:var(--text3);margin-top:3px;margin-bottom:2rem;}
 
   /* Tabs */
-  .tabs { display: flex; gap: 4px; background: var(--bg2); border-radius: 10px; padding: 4px; margin-bottom: 1.5rem; }
-  .tab { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text2); transition: all 0.15s; }
-  .tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .tabs{display:flex;gap:4px;background:var(--bg2);border-radius:10px;padding:4px;margin-bottom:1.25rem;}
+  .tab{flex:1;padding:8px;border:none;background:transparent;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s;}
+  .tab.on{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
 
-  /* Level filter */
-  .level-row { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .lbtn { padding: 5px 14px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--text2); transition: all 0.15s; }
-  .lbtn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  /* Level */
+  .lvls{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.25rem;}
+  .lb{padding:5px 13px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text2);transition:all .15s;font-weight:500;}
+  .lb.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 
   /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.75rem; }
-  .stat { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
-  .stat-n { font-size: 24px; font-weight: 600; }
-  .stat-l { font-size: 11px; color: var(--text3); margin-top: 2px; letter-spacing: 0.3px; }
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem;}
+  .st{background:var(--bg2);border-radius:var(--rs);padding:10px;text-align:center;}
+  .st-n{font-size:22px;font-weight:600;}
+  .st-l{font-size:10px;color:var(--text3);margin-top:2px;letter-spacing:.3px;text-transform:uppercase;}
 
   /* Progress */
-  .prog-wrap { height: 3px; background: var(--bg3); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
-  .prog-bar { height: 3px; background: var(--text); border-radius: 2px; transition: width 0.4s ease; }
+  .pg{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:1.25rem;overflow:hidden;}
+  .pgb{height:3px;background:var(--text);border-radius:2px;transition:width .4s;}
 
-  /* Flashcard */
-  .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem 2rem; text-align: center; cursor: pointer; transition: border-color 0.15s, transform 0.1s; user-select: none; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .card:hover { border-color: var(--border2); }
-  .card:active { transform: scale(0.99); }
-  .card-word { font-size: 36px; font-weight: 600; letter-spacing: -1px; }
-  .card-ph { font-size: 14px; color: var(--text2); margin-top: 6px; font-style: italic; }
-  .card-tags { display: flex; gap: 5px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
-  .tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: var(--bg2); color: var(--text3); border: 1px solid var(--border); }
-  .tag.exam-tag { background: var(--blue-bg); color: var(--blue); border-color: transparent; }
-  .card-meaning { font-size: 17px; color: var(--text); margin-top: 18px; display: none; font-weight: 500; }
-  .card-pos { font-size: 12px; color: var(--text3); margin-top: 4px; display: none; }
-  .card-ex { font-size: 13px; color: var(--text2); margin-top: 10px; line-height: 1.6; display: none; font-style: italic; }
-  .card-hint { font-size: 12px; color: var(--text3); margin-top: 20px; }
-
-  /* Card buttons */
-  .card-btns { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-top: 1rem; }
-  .cbtn { padding: 10px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; font-size: 13px; cursor: pointer; color: var(--text); transition: all 0.12s; }
-  .cbtn:hover { background: var(--bg2); }
-  .cbtn-no { border-color: var(--red); color: var(--red); }
-  .cbtn-no:hover { background: var(--red-bg); }
-  .cbtn-yes { border-color: var(--green); color: var(--green); }
-  .cbtn-yes:hover { background: var(--green-bg); }
-  .cbtn-skip { color: var(--text2); }
+  /* Card */
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem 1.75rem;text-align:center;cursor:pointer;user-select:none;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .15s;}
+  .card:hover{border-color:var(--border2);}
+  .cw{font-size:36px;font-weight:600;letter-spacing:-1px;}
+  .cph{font-size:13px;color:var(--text2);margin-top:5px;font-style:italic;}
+  .ctags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+  .tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--text3);border:1px solid var(--border);}
+  .etag{background:var(--blue-bg);color:var(--blue);border-color:transparent;}
+  .ltag-a1{background:#e8f5e9;color:#2e7d32;border:none;}
+  .ltag-a2{background:#e3f2fd;color:#1565c0;border:none;}
+  .ltag-b1{background:#fff8e1;color:#f57f17;border:none;}
+  .ltag-b2{background:#fce4ec;color:#c62828;border:none;}
+  .ltag-c1{background:#f3e5f5;color:#6a1b9a;border:none;}
+  @media(prefers-color-scheme:dark){
+    .ltag-a1{background:#1b3a1f;color:#81c784;}.ltag-a2{background:#0d2137;color:#64b5f6;}.ltag-b1{background:#332a00;color:#ffcc02;}.ltag-b2{background:#3b0d14;color:#ef9a9a;}.ltag-c1{background:#2a0d38;color:#ce93d8;}
+  }
+  .cm{font-size:17px;font-weight:500;margin-top:16px;display:none;}
+  .cpos{font-size:11px;color:var(--text3);margin-top:3px;display:none;}
+  .cex{font-size:13px;color:var(--text2);margin-top:8px;line-height:1.6;font-style:italic;display:none;}
+  .chint{font-size:11px;color:var(--text3);margin-top:16px;}
+  .cbtns{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;margin-top:.85rem;}
+  .cb{padding:10px 14px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;font-size:13px;cursor:pointer;color:var(--text);transition:all .12s;}
+  .cb:hover{background:var(--bg2);}
+  .cb-no{border-color:var(--red);color:var(--red);}
+  .cb-no:hover{background:var(--red-bg);}
+  .cb-yes{border-color:var(--green);color:var(--green);}
+  .cb-yes:hover{background:var(--green-bg);}
+  .cb-sk{color:var(--text2);}
 
   /* Quiz */
-  .quiz-word { font-size: 32px; font-weight: 600; text-align: center; letter-spacing: -0.8px; margin-bottom: 6px; }
-  .quiz-ph { font-size: 13px; color: var(--text2); text-align: center; font-style: italic; margin-bottom: 6px; }
-  .quiz-tags { display: flex; gap: 5px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
-  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  .opt { padding: 16px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 14px; color: var(--text); text-align: left; line-height: 1.4; transition: all 0.12s; }
-  .opt:hover:not(:disabled) { border-color: var(--border2); background: var(--bg2); }
-  .opt.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
-  .opt.wrong { background: var(--red-bg); border-color: var(--red); color: var(--red); }
-  .opt:disabled { cursor: default; }
-  .next-row { display: none; margin-top: 0.5rem; }
-  .btn-primary { width: 100%; padding: 11px; border-radius: var(--radius-sm); border: none; background: var(--text); color: var(--bg); font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
-  .btn-primary:hover { opacity: 0.8; }
-  .btn-outline { width: 100%; padding: 11px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text); font-size: 14px; cursor: pointer; }
-  .btn-outline:hover { background: var(--bg2); }
+  .qw{font-size:32px;font-weight:600;text-align:center;letter-spacing:-.8px;margin-bottom:4px;}
+  .qph{font-size:13px;color:var(--text2);text-align:center;font-style:italic;margin-bottom:4px;}
+  .qtags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem;}
+  .opt{padding:15px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);text-align:left;line-height:1.4;transition:all .12s;}
+  .opt:hover:not(:disabled){border-color:var(--border2);background:var(--bg2);}
+  .opt.ok{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+  .opt.ng{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+  .opt:disabled{cursor:default;}
+  .nxrow{display:none;margin-top:.25rem;}
+  .btnp{width:100%;padding:11px;border-radius:var(--rs);border:none;background:var(--text);color:var(--bg);font-size:14px;font-weight:500;cursor:pointer;}
+  .btnp:hover{opacity:.8;}
+  .btno{width:100%;padding:11px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;color:var(--text);font-size:14px;cursor:pointer;}
+  .btno:hover{background:var(--bg2);}
 
   /* Result */
-  .result { display: none; text-align: center; padding: 3rem 1rem; }
-  .result-score { font-size: 56px; font-weight: 700; letter-spacing: -2px; }
-  .result-sub { font-size: 14px; color: var(--text2); margin-top: 4px; margin-bottom: 2rem; }
-  .result-btns { display: flex; gap: 10px; max-width: 320px; margin: 0 auto; }
+  .res{display:none;text-align:center;padding:3rem 1rem;}
+  .rs{font-size:52px;font-weight:700;letter-spacing:-2px;}
+  .rl{font-size:14px;color:var(--text2);margin-top:4px;margin-bottom:2rem;}
+  .rbtns{display:flex;gap:8px;max-width:300px;margin:0 auto;}
 
   /* Match */
-  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  .match-col { display: flex; flex-direction: column; gap: 8px; }
-  .mbtn { padding: 11px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 13px; color: var(--text); text-align: left; line-height: 1.4; transition: all 0.12s; min-height: 48px; }
-  .mbtn:hover { border-color: var(--border2); }
-  .mbtn.sel { border-color: var(--text); background: var(--bg2); }
-  .mbtn.matched { background: var(--green-bg); border-color: var(--green); color: var(--green); cursor: default; }
-  .mbtn.err { background: var(--red-bg); border-color: var(--red); }
-  .match-msg { text-align: center; font-size: 13px; color: var(--text2); margin-bottom: 1rem; min-height: 20px; }
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem;}
+  .mcol{display:flex;flex-direction:column;gap:7px;}
+  .mb{padding:11px 10px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;color:var(--text);text-align:left;line-height:1.4;transition:all .12s;min-height:46px;}
+  .mb:hover{border-color:var(--border2);}
+  .mb.sel{border-color:var(--text);background:var(--bg2);}
+  .mb.matched{background:var(--green-bg);border-color:var(--green);color:var(--green);cursor:default;}
+  .mb.err{background:var(--red-bg);border-color:var(--red);}
+  .mmsg{text-align:center;font-size:13px;color:var(--text2);margin-bottom:.75rem;min-height:20px;}
 
-  /* Divider */
-  hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
-
-  /* Hidden */
-  .hidden { display: none !important; }
-
-  /* Responsive */
-  @media (max-width: 480px) {
-    .options { grid-template-columns: 1fr; }
-    .card-word { font-size: 28px; }
-    .quiz-word { font-size: 26px; }
-    .result-score { font-size: 44px; }
+  .hidden{display:none!important;}
+  @media(max-width:480px){
+    .opts{grid-template-columns:1fr;}
+    .cw{font-size:28px;}.qw{font-size:25px;}.rs{font-size:42px;}
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="logo">vocab trainer <span>/ สอบเข้ามหาวิทยาลัย</span></div>
-    <div class="tagline">A-Level · TGAT · TOEFL ITP — ระดับง่ายถึงยาก</div>
-  </div>
+<div class="wrap">
+  <div class="logo">vocab trainer <span>/ สอบเข้ามหาวิทยาลัย</span></div>
+  <div class="sub">A-Level · TGAT · TOEFL ITP &nbsp;|&nbsp; CEFR A1 – C1 &nbsp;|&nbsp; <span id="word-count">0</span> คำ</div>
 
   <div class="tabs">
-    <button class="tab active" onclick="switchMode('flash')">🃏 Flashcard</button>
+    <button class="tab on" onclick="switchMode('flash')">🃏 Flashcard</button>
     <button class="tab" onclick="switchMode('quiz')">🧠 Quiz</button>
     <button class="tab" onclick="switchMode('match')">🔗 จับคู่</button>
   </div>
 
-  <div class="level-row">
-    <button class="lbtn active" onclick="setLevel('all')">ทั้งหมด</button>
-    <button class="lbtn" onclick="setLevel('easy')">🌱 ง่าย</button>
-    <button class="lbtn" onclick="setLevel('med')">🔥 กลาง</button>
-    <button class="lbtn" onclick="setLevel('hard')">⚡ ยาก</button>
+  <div class="lvls">
+    <button class="lb on" onclick="setLevel('all')">ทั้งหมด</button>
+    <button class="lb" onclick="setLevel('A1')">A1</button>
+    <button class="lb" onclick="setLevel('A2')">A2</button>
+    <button class="lb" onclick="setLevel('B1')">B1</button>
+    <button class="lb" onclick="setLevel('B2')">B2</button>
+    <button class="lb" onclick="setLevel('C1')">C1</button>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-n" id="s-total">0</div><div class="stat-l">คำทั้งหมด</div></div>
-    <div class="stat"><div class="stat-n" id="s-known">0</div><div class="stat-l">รู้แล้ว ✓</div></div>
-    <div class="stat"><div class="stat-n" id="s-streak">0</div><div class="stat-l">streak 🔥</div></div>
+    <div class="st"><div class="st-n" id="s-total">0</div><div class="st-l">คำทั้งหมด</div></div>
+    <div class="st"><div class="st-n" id="s-known">0</div><div class="st-l">รู้แล้ว ✓</div></div>
+    <div class="st"><div class="st-n" id="s-streak">0</div><div class="st-l">streak 🔥</div></div>
   </div>
 
-  <!-- FLASHCARD MODE -->
+  <!-- FLASH -->
   <div id="m-flash">
-    <div class="prog-wrap"><div class="prog-bar" id="f-prog" style="width:0%"></div></div>
-    <div class="card" id="flashcard" onclick="flipCard()">
-      <div class="card-word" id="f-word">—</div>
-      <div class="card-ph" id="f-ph"></div>
-      <div class="card-tags" id="f-tags"></div>
-      <div class="card-meaning" id="f-meaning"></div>
-      <div class="card-pos" id="f-pos"></div>
-      <div class="card-ex" id="f-ex"></div>
-      <div class="card-hint" id="f-hint">แตะเพื่อดูความหมาย</div>
+    <div class="pg"><div class="pgb" id="fp" style="width:0%"></div></div>
+    <div class="card" id="fc" onclick="flip()">
+      <div class="cw" id="fw">—</div>
+      <div class="cph" id="fph"></div>
+      <div class="ctags" id="ftags"></div>
+      <div class="cm" id="fm"></div>
+      <div class="cpos" id="fpos"></div>
+      <div class="cex" id="fex"></div>
+      <div class="chint" id="fhint">แตะเพื่อดูความหมาย</div>
     </div>
-    <div class="card-btns" style="margin-top:1rem;">
-      <button class="cbtn cbtn-no" onclick="markCard(false)">✕ ยังไม่รู้</button>
-      <button class="cbtn cbtn-skip" onclick="nextCard()">→ ข้าม</button>
-      <button class="cbtn cbtn-yes" onclick="markCard(true)">✓ รู้แล้ว</button>
+    <div class="cbtns">
+      <button class="cb cb-no" onclick="mark(false)">✕ ยังไม่รู้</button>
+      <button class="cb cb-sk" onclick="nextCard()">→</button>
+      <button class="cb cb-yes" onclick="mark(true)">✓ รู้แล้ว</button>
     </div>
   </div>
 
-  <!-- QUIZ MODE -->
+  <!-- QUIZ -->
   <div id="m-quiz" class="hidden">
-    <div class="prog-wrap"><div class="prog-bar" id="q-prog" style="width:0%"></div></div>
-    <div id="q-body">
-      <div class="quiz-word" id="q-word">—</div>
-      <div class="quiz-ph" id="q-ph"></div>
-      <div class="quiz-tags" id="q-tags"></div>
-      <div class="options" id="q-opts"></div>
-      <div class="next-row" id="q-next"><button class="btn-primary" onclick="nextQuiz()">ถัดไป →</button></div>
+    <div class="pg"><div class="pgb" id="qp" style="width:0%"></div></div>
+    <div id="qbody">
+      <div class="qw" id="qw">—</div>
+      <div class="qph" id="qph"></div>
+      <div class="qtags" id="qtags"></div>
+      <div class="opts" id="qopts"></div>
+      <div class="nxrow" id="qnx"><button class="btnp" onclick="nextQuiz()">ถัดไป →</button></div>
     </div>
-    <div class="result" id="q-result">
-      <div class="result-score" id="r-score">0/0</div>
-      <div class="result-sub" id="r-sub">คะแนน</div>
-      <div class="result-btns">
-        <button class="btn-primary" onclick="restartQuiz()">เล่นใหม่</button>
-        <button class="btn-outline" onclick="switchMode('flash')">Flashcard</button>
+    <div class="res" id="qres">
+      <div class="rs" id="rscore">0/0</div>
+      <div class="rl" id="rsub"></div>
+      <div class="rbtns">
+        <button class="btnp" onclick="startQuiz()">เล่นใหม่</button>
+        <button class="btno" onclick="switchMode('flash')">Flashcard</button>
       </div>
     </div>
   </div>
 
-  <!-- MATCH MODE -->
+  <!-- MATCH -->
   <div id="m-match" class="hidden">
-    <div class="match-grid">
-      <div class="match-col" id="mc-words"></div>
-      <div class="match-col" id="mc-defs"></div>
+    <div class="mgrid">
+      <div class="mcol" id="mw"></div>
+      <div class="mcol" id="md"></div>
     </div>
-    <div class="match-msg" id="match-msg"></div>
-    <button class="btn-outline" onclick="startMatch()">🔀 ชุดใหม่</button>
+    <div class="mmsg" id="mmsg"></div>
+    <button class="btno" onclick="startMatch()">🔀 ชุดใหม่</button>
   </div>
 </div>
 
 <script>
-const VOCAB = [
-  // === EASY ===
-  {w:"abundant",ph:"/əˈbʌn.dənt/",pos:"adj.",th:"มากมาย, อุดมสมบูรณ์",ex:"The region has abundant natural resources.",lvl:"easy",exam:["TOEFL","A-Level"]},
-  {w:"accurate",ph:"/ˈæk.jʊ.rət/",pos:"adj.",th:"ถูกต้อง, แม่นยำ",ex:"The weather forecast was surprisingly accurate.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"adequate",ph:"/ˈæd.ɪ.kwət/",pos:"adj.",th:"เพียงพอ",ex:"The food supply was adequate for the trip.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"bias",ph:"/ˈbaɪ.əs/",pos:"n.",th:"อคติ, ความลำเอียง",ex:"The study was criticized for its obvious bias.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"brief",ph:"/briːf/",pos:"adj.",th:"สั้น, กระชับ",ex:"She gave a brief summary of the report.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"broad",ph:"/brɔːd/",pos:"adj.",th:"กว้าง, กว้างขวาง",ex:"He has a broad knowledge of history.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"compel",ph:"/kəmˈpel/",pos:"v.",th:"บังคับ, ผลักดัน",ex:"The evidence compelled him to confess.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"conceal",ph:"/kənˈsiːl/",pos:"v.",th:"ซ่อน, ปิดบัง",ex:"He tried to conceal his disappointment.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"confirm",ph:"/kənˈfɜːm/",pos:"v.",th:"ยืนยัน, รับรอง",ex:"Please confirm your booking by email.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"crucial",ph:"/ˈkruː.ʃəl/",pos:"adj.",th:"สำคัญมาก, จำเป็น",ex:"Timing is crucial in competitive sports.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"diverse",ph:"/daɪˈvɜːs/",pos:"adj.",th:"หลากหลาย",ex:"The city has a diverse population.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"emphasize",ph:"/ˈem.fə.saɪz/",pos:"v.",th:"เน้น, ให้ความสำคัญ",ex:"The teacher emphasized the need to revise.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"ensure",ph:"/ɪnˈʃʊər/",pos:"v.",th:"รับรอง, ทำให้แน่ใจ",ex:"Please ensure all windows are closed.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"generate",ph:"/ˈdʒen.ə.reɪt/",pos:"v.",th:"ก่อให้เกิด, ผลิต",ex:"Solar panels generate clean energy.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"genuine",ph:"/ˈdʒen.ju.ɪn/",pos:"adj.",th:"แท้จริง, จริงใจ",ex:"She showed genuine concern for others.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"hasty",ph:"/ˈheɪ.sti/",pos:"adj.",th:"รีบร้อน, ไม่ไตร่ตรอง",ex:"Don't make a hasty decision you'll regret.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"impact",ph:"/ˈɪm.pækt/",pos:"n.",th:"ผลกระทบ, แรงกระแทก",ex:"The new policy had a major impact on trade.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"imply",ph:"/ɪmˈplaɪ/",pos:"v.",th:"บอกเป็นนัย, แฝงความหมาย",ex:"Her silence seemed to imply agreement.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"keen",ph:"/kiːn/",pos:"adj.",th:"กระตือรือร้น, เฉียบคม",ex:"She has a keen interest in science.",lvl:"easy",exam:["A-Level","TGAT"]},
-  {w:"notable",ph:"/ˈnəʊ.tə.bəl/",pos:"adj.",th:"น่าสังเกต, โดดเด่น",ex:"There has been a notable increase in sales.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"obtain",ph:"/əbˈteɪn/",pos:"v.",th:"ได้มา, บรรลุ",ex:"You can obtain a visa at the embassy.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"preserve",ph:"/prɪˈzɜːv/",pos:"v.",th:"อนุรักษ์, รักษาไว้",ex:"We must preserve the rainforest.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"prompt",ph:"/prɒmpt/",pos:"adj.",th:"รวดเร็ว, ทันที",ex:"Thank you for your prompt reply.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"relevant",ph:"/ˈrel.ɪ.vənt/",pos:"adj.",th:"เกี่ยวข้อง, เหมาะสม",ex:"Please provide relevant work experience.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"reveal",ph:"/rɪˈviːl/",pos:"v.",th:"เปิดเผย, แสดงออก",ex:"The investigation revealed hidden flaws.",lvl:"easy",exam:["TGAT","A-Level"]},
-  {w:"shift",ph:"/ʃɪft/",pos:"v/n.",th:"เปลี่ยน, ขยับ",ex:"There has been a shift in public opinion.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"significant",ph:"/sɪɡˈnɪf.ɪ.kənt/",pos:"adj.",th:"สำคัญ, มีนัยสำคัญ",ex:"There is a significant difference in cost.",lvl:"easy",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"vague",ph:"/veɪɡ/",pos:"adj.",th:"คลุมเครือ, ไม่ชัดเจน",ex:"His answer was vague and unsatisfying.",lvl:"easy",exam:["TGAT","A-Level"]},
+const V=[
+// ── A1 ──────────────────────────────────────────────────────────────
+{w:"agree",ph:"/əˈɡriː/",pos:"v.",th:"เห็นด้วย",ex:"I agree with your opinion.",l:"A1",e:["TGAT"]},
+{w:"ask",ph:"/ɑːsk/",pos:"v.",th:"ถาม, ขอ",ex:"She asked for help.",l:"A1",e:["TGAT","A-Level"]},
+{w:"begin",ph:"/bɪˈɡɪn/",pos:"v.",th:"เริ่มต้น",ex:"Let's begin the lesson.",l:"A1",e:["TGAT","A-Level"]},
+{w:"bring",ph:"/brɪŋ/",pos:"v.",th:"นำมา",ex:"Please bring your notebook.",l:"A1",e:["TGAT"]},
+{w:"busy",ph:"/ˈbɪz.i/",pos:"adj.",th:"ยุ่ง, ไม่ว่าง",ex:"She is busy with homework.",l:"A1",e:["TGAT"]},
+{w:"carry",ph:"/ˈkær.i/",pos:"v.",th:"ถือ, แบก",ex:"Can you carry this bag?",l:"A1",e:["TGAT","A-Level"]},
+{w:"cause",ph:"/kɔːz/",pos:"n/v.",th:"สาเหตุ, ก่อให้เกิด",ex:"Smoking can cause cancer.",l:"A1",e:["TGAT","A-Level","TOEFL"]},
+{w:"change",ph:"/tʃeɪndʒ/",pos:"v/n.",th:"เปลี่ยน, การเปลี่ยนแปลง",ex:"Things change over time.",l:"A1",e:["TGAT","A-Level"]},
+{w:"choose",ph:"/tʃuːz/",pos:"v.",th:"เลือก",ex:"Choose the best answer.",l:"A1",e:["TGAT","A-Level"]},
+{w:"clean",ph:"/kliːn/",pos:"adj/v.",th:"สะอาด, ทำความสะอาด",ex:"Keep your room clean.",l:"A1",e:["TGAT"]},
+{w:"close",ph:"/kləʊz/",pos:"v/adj.",th:"ปิด, ใกล้",ex:"Please close the door.",l:"A1",e:["TGAT"]},
+{w:"cost",ph:"/kɒst/",pos:"n/v.",th:"ค่าใช้จ่าย, มีราคา",ex:"How much does it cost?",l:"A1",e:["TGAT","A-Level"]},
+{w:"easy",ph:"/ˈiː.zi/",pos:"adj.",th:"ง่าย",ex:"The exam was easy.",l:"A1",e:["TGAT"]},
+{w:"enjoy",ph:"/ɪnˈdʒɔɪ/",pos:"v.",th:"สนุก, เพลิดเพลิน",ex:"I enjoy reading books.",l:"A1",e:["TGAT"]},
+{w:"free",ph:"/friː/",pos:"adj.",th:"ฟรี, อิสระ",ex:"Admission is free today.",l:"A1",e:["TGAT"]},
+{w:"give",ph:"/ɡɪv/",pos:"v.",th:"ให้",ex:"Give me a moment to think.",l:"A1",e:["TGAT"]},
+{w:"hard",ph:"/hɑːd/",pos:"adj/adv.",th:"ยาก, หนัก, อย่างหนัก",ex:"She works very hard.",l:"A1",e:["TGAT"]},
+{w:"happy",ph:"/ˈhæp.i/",pos:"adj.",th:"มีความสุข",ex:"She looks very happy today.",l:"A1",e:["TGAT"]},
+{w:"help",ph:"/help/",pos:"v/n.",th:"ช่วยเหลือ",ex:"Can you help me, please?",l:"A1",e:["TGAT","A-Level"]},
+{w:"like",ph:"/laɪk/",pos:"v/prep.",th:"ชอบ, เหมือน",ex:"I like pizza very much.",l:"A1",e:["TGAT"]},
+{w:"live",ph:"/lɪv/",pos:"v.",th:"อาศัยอยู่, มีชีวิต",ex:"She lives in Bangkok.",l:"A1",e:["TGAT"]},
+{w:"love",ph:"/lʌv/",pos:"v/n.",th:"รัก, ความรัก",ex:"I love spending time outdoors.",l:"A1",e:["TGAT"]},
+{w:"meet",ph:"/miːt/",pos:"v.",th:"พบ, เจอ",ex:"Nice to meet you.",l:"A1",e:["TGAT"]},
+{w:"need",ph:"/niːd/",pos:"v/n.",th:"ต้องการ",ex:"We need more time.",l:"A1",e:["TGAT","A-Level"]},
+{w:"open",ph:"/ˈəʊ.pən/",pos:"v/adj.",th:"เปิด",ex:"The shop opens at 9 a.m.",l:"A1",e:["TGAT"]},
+{w:"place",ph:"/pleɪs/",pos:"n/v.",th:"สถานที่, วาง",ex:"This is a beautiful place.",l:"A1",e:["TGAT","A-Level"]},
+{w:"plan",ph:"/plæn/",pos:"n/v.",th:"แผน, วางแผน",ex:"What is your plan for today?",l:"A1",e:["TGAT","A-Level"]},
+{w:"problem",ph:"/ˈprɒb.ləm/",pos:"n.",th:"ปัญหา",ex:"We have a big problem.",l:"A1",e:["TGAT","A-Level"]},
+{w:"safe",ph:"/seɪf/",pos:"adj.",th:"ปลอดภัย",ex:"Keep your password safe.",l:"A1",e:["TGAT"]},
+{w:"start",ph:"/stɑːt/",pos:"v/n.",th:"เริ่ม, การเริ่มต้น",ex:"Let's start from the beginning.",l:"A1",e:["TGAT"]},
+{w:"stop",ph:"/stɒp/",pos:"v.",th:"หยุด",ex:"Please stop talking.",l:"A1",e:["TGAT"]},
+{w:"talk",ph:"/tɔːk/",pos:"v/n.",th:"พูด, คุย",ex:"Let's talk about this later.",l:"A1",e:["TGAT"]},
+{w:"think",ph:"/θɪŋk/",pos:"v.",th:"คิด",ex:"I think you are right.",l:"A1",e:["TGAT","A-Level"]},
+{w:"use",ph:"/juːz/",pos:"v.",th:"ใช้",ex:"Use a dictionary for help.",l:"A1",e:["TGAT","A-Level"]},
+{w:"want",ph:"/wɒnt/",pos:"v.",th:"ต้องการ, อยาก",ex:"I want to learn more.",l:"A1",e:["TGAT"]},
 
-  // === MEDIUM ===
-  {w:"ambiguous",ph:"/æmˈbɪɡ.ju.əs/",pos:"adj.",th:"กำกวม, มีความหมายสองแง่",ex:"The contract language was deliberately ambiguous.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"benevolent",ph:"/bəˈnev.ə.lənt/",pos:"adj.",th:"ใจดี, มีเมตตา",ex:"The benevolent king was loved by his people.",lvl:"med",exam:["A-Level","TOEFL"]},
-  {w:"comply",ph:"/kəmˈplaɪ/",pos:"v.",th:"ปฏิบัติตาม, ยอมทำตาม",ex:"All staff must comply with the new rules.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"contradict",ph:"/ˌkɒn.trəˈdɪkt/",pos:"v.",th:"ขัดแย้ง, โต้แย้ง",ex:"His actions contradicted his words.",lvl:"med",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"controversial",ph:"/ˌkɒn.trəˈvɜː.ʃəl/",pos:"adj.",th:"ก่อให้เกิดการโต้เถียง",ex:"The new law is highly controversial.",lvl:"med",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"deteriorate",ph:"/dɪˈtɪər.i.ə.reɪt/",pos:"v.",th:"เสื่อมลง, แย่ลง",ex:"His health began to deteriorate rapidly.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"eloquent",ph:"/ˈel.ə.kwənt/",pos:"adj.",th:"พูดเก่ง, มีวาทศิลป์",ex:"She gave an eloquent speech at the ceremony.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"endure",ph:"/ɪnˈdjʊər/",pos:"v.",th:"ทนทาน, อดทน",ex:"They had to endure weeks of harsh weather.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"evident",ph:"/ˈev.ɪ.dənt/",pos:"adj.",th:"ชัดเจน, เห็นได้ชัด",ex:"It was evident that she was nervous.",lvl:"med",exam:["TGAT","A-Level","TOEFL"]},
-  {w:"fabricate",ph:"/ˈfæb.rɪ.keɪt/",pos:"v.",th:"ประดิษฐ์, กุเรื่อง",ex:"He fabricated an excuse to avoid the meeting.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"fluctuate",ph:"/ˈflʌk.tʃu.eɪt/",pos:"v.",th:"ผันแปร, ขึ้นลง",ex:"Oil prices fluctuate with global demand.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"imminent",ph:"/ˈɪm.ɪ.nənt/",pos:"adj.",th:"ใกล้จะเกิดขึ้น",ex:"There is an imminent threat of flooding.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"lenient",ph:"/ˈliː.ni.ənt/",pos:"adj.",th:"ผ่อนปรน, ไม่เข้มงวด",ex:"The judge was lenient with first-time offenders.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"notorious",ph:"/nəʊˈtɔː.ri.əs/",pos:"adj.",th:"มีชื่อเสียงในทางเสีย",ex:"The area is notorious for heavy traffic jams.",lvl:"med",exam:["TGAT","A-Level"]},
-  {w:"obsolete",ph:"/ˌɒb.səˈliːt/",pos:"adj.",th:"ล้าสมัย, หมดยุค",ex:"Cassette tapes are now completely obsolete.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"perceive",ph:"/pəˈsiːv/",pos:"v.",th:"รับรู้, มองว่า",ex:"She perceived the comment as an insult.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"persistent",ph:"/pəˈsɪs.tənt/",pos:"adj.",th:"ยืนกราน, ต่อเนื่อง",ex:"Persistent rain caused flooding in the area.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"reinforce",ph:"/ˌriː.ɪnˈfɔːs/",pos:"v.",th:"เสริมความแข็งแกร่ง",ex:"The teacher reinforced key grammar points.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"resilient",ph:"/rɪˈzɪl.i.ənt/",pos:"adj.",th:"ฟื้นตัวได้ดี, เหนียวแน่น",ex:"Children are often more resilient than adults.",lvl:"med",exam:["TOEFL","A-Level","TGAT"]},
-  {w:"suppress",ph:"/səˈpres/",pos:"v.",th:"ปราบปราม, ระงับ",ex:"He tried to suppress his anger.",lvl:"med",exam:["TOEFL","TGAT"]},
-  {w:"withhold",ph:"/wɪðˈhəʊld/",pos:"v.",th:"ปิดบัง, กักเก็บ",ex:"She decided to withhold the information.",lvl:"med",exam:["TOEFL","A-Level"]},
-  {w:"yearning",ph:"/ˈjɜː.nɪŋ/",pos:"n.",th:"ความโหยหา, ความปรารถนา",ex:"She felt a deep yearning for her hometown.",lvl:"med",exam:["A-Level","TOEFL"]},
+// ── A2 ──────────────────────────────────────────────────────────────
+{w:"accept",ph:"/əkˈsept/",pos:"v.",th:"ยอมรับ",ex:"She accepted his apology.",l:"A2",e:["TGAT","A-Level"]},
+{w:"achieve",ph:"/əˈtʃiːv/",pos:"v.",th:"บรรลุ, สำเร็จ",ex:"She achieved her goal.",l:"A2",e:["TGAT","A-Level"]},
+{w:"allow",ph:"/əˈlaʊ/",pos:"v.",th:"อนุญาต, ยอมให้",ex:"Phones are not allowed here.",l:"A2",e:["TGAT","A-Level"]},
+{w:"apply",ph:"/əˈplaɪ/",pos:"v.",th:"สมัคร, นำไปใช้",ex:"Apply sunscreen before going out.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"avoid",ph:"/əˈvɔɪd/",pos:"v.",th:"หลีกเลี่ยง",ex:"Try to avoid processed food.",l:"A2",e:["TGAT","A-Level"]},
+{w:"benefit",ph:"/ˈben.ɪ.fɪt/",pos:"n/v.",th:"ประโยชน์, ได้รับประโยชน์",ex:"Exercise has many health benefits.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"compare",ph:"/kəmˈpeər/",pos:"v.",th:"เปรียบเทียบ",ex:"Compare the two options carefully.",l:"A2",e:["TGAT","A-Level"]},
+{w:"complete",ph:"/kəmˈpliːt/",pos:"v/adj.",th:"เสร็จสมบูรณ์, ทำให้สมบูรณ์",ex:"Complete the form online.",l:"A2",e:["TGAT","A-Level"]},
+{w:"consider",ph:"/kənˈsɪd.ər/",pos:"v.",th:"พิจารณา, คำนึงถึง",ex:"Consider all the options first.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"decide",ph:"/dɪˈsaɪd/",pos:"v.",th:"ตัดสินใจ",ex:"She decided to study abroad.",l:"A2",e:["TGAT","A-Level"]},
+{w:"describe",ph:"/dɪˈskraɪb/",pos:"v.",th:"อธิบาย, บรรยาย",ex:"Describe what you see.",l:"A2",e:["TGAT","A-Level"]},
+{w:"develop",ph:"/dɪˈvel.əp/",pos:"v.",th:"พัฒนา",ex:"We need to develop new skills.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"effect",ph:"/ɪˈfekt/",pos:"n.",th:"ผล, ผลกระทบ",ex:"What effect does stress have?",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"expect",ph:"/ɪkˈspekt/",pos:"v.",th:"คาดหวัง, คาดว่า",ex:"I expect good results.",l:"A2",e:["TGAT","A-Level"]},
+{w:"explain",ph:"/ɪkˈspleɪn/",pos:"v.",th:"อธิบาย",ex:"Can you explain this question?",l:"A2",e:["TGAT","A-Level"]},
+{w:"fail",ph:"/feɪl/",pos:"v.",th:"ล้มเหลว, สอบตก",ex:"Don't be afraid to fail.",l:"A2",e:["TGAT"]},
+{w:"feeling",ph:"/ˈfiː.lɪŋ/",pos:"n.",th:"ความรู้สึก",ex:"Share your feelings openly.",l:"A2",e:["TGAT"]},
+{w:"improve",ph:"/ɪmˈpruːv/",pos:"v.",th:"ปรับปรุง, ดีขึ้น",ex:"She improved her English daily.",l:"A2",e:["TGAT","A-Level"]},
+{w:"increase",ph:"/ɪnˈkriːs/",pos:"v/n.",th:"เพิ่มขึ้น",ex:"Prices have increased this year.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"interest",ph:"/ˈɪn.trɪst/",pos:"n/v.",th:"ความสนใจ",ex:"She has an interest in music.",l:"A2",e:["TGAT","A-Level"]},
+{w:"join",ph:"/dʒɔɪn/",pos:"v.",th:"เข้าร่วม",ex:"Join the club if you want.",l:"A2",e:["TGAT"]},
+{w:"local",ph:"/ˈləʊ.kəl/",pos:"adj.",th:"ท้องถิ่น",ex:"Support local businesses.",l:"A2",e:["TGAT","A-Level"]},
+{w:"lose",ph:"/luːz/",pos:"v.",th:"แพ้, สูญเสีย",ex:"Don't lose your ticket.",l:"A2",e:["TGAT"]},
+{w:"manage",ph:"/ˈmæn.ɪdʒ/",pos:"v.",th:"จัดการ, สามารถทำได้",ex:"She manages her time well.",l:"A2",e:["TGAT","A-Level"]},
+{w:"perform",ph:"/pəˈfɔːm/",pos:"v.",th:"แสดง, ทำงาน",ex:"The band performed last night.",l:"A2",e:["TGAT","A-Level"]},
+{w:"popular",ph:"/ˈpɒp.jʊ.lər/",pos:"adj.",th:"เป็นที่นิยม",ex:"This song is very popular.",l:"A2",e:["TGAT","A-Level"]},
+{w:"prepare",ph:"/prɪˈpeər/",pos:"v.",th:"เตรียมพร้อม",ex:"Prepare for the exam.",l:"A2",e:["TGAT","A-Level"]},
+{w:"produce",ph:"/prəˈdjuːs/",pos:"v.",th:"ผลิต, สร้าง",ex:"Thailand produces a lot of rice.",l:"A2",e:["TGAT","A-Level"]},
+{w:"provide",ph:"/prəˈvaɪd/",pos:"v.",th:"ให้, จัดหา",ex:"The school provides free lunch.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"reduce",ph:"/rɪˈdjuːs/",pos:"v.",th:"ลด",ex:"We should reduce plastic waste.",l:"A2",e:["TGAT","A-Level"]},
+{w:"respond",ph:"/rɪˈspɒnd/",pos:"v.",th:"ตอบสนอง",ex:"Please respond by Friday.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"result",ph:"/rɪˈzʌlt/",pos:"n/v.",th:"ผลลัพธ์",ex:"The results will be out soon.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"simple",ph:"/ˈsɪm.pəl/",pos:"adj.",th:"ง่าย, เรียบง่าย",ex:"Keep it simple.",l:"A2",e:["TGAT"]},
+{w:"solve",ph:"/sɒlv/",pos:"v.",th:"แก้ปัญหา",ex:"Can you solve this equation?",l:"A2",e:["TGAT","A-Level"]},
+{w:"support",ph:"/səˈpɔːt/",pos:"v/n.",th:"สนับสนุน",ex:"Thank you for your support.",l:"A2",e:["TGAT","A-Level","TOEFL"]},
+{w:"suggest",ph:"/səˈdʒest/",pos:"v.",th:"แนะนำ, เสนอ",ex:"I suggest you try again.",l:"A2",e:["TGAT","A-Level"]},
+{w:"travel",ph:"/ˈtræv.əl/",pos:"v/n.",th:"เดินทาง",ex:"I love to travel abroad.",l:"A2",e:["TGAT","A-Level"]},
 
-  // === HARD ===
-  {w:"alleviate",ph:"/əˈliː.vi.eɪt/",pos:"v.",th:"บรรเทา, ลดความรุนแรง",ex:"The medicine alleviated her pain significantly.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"ambivalent",ph:"/æmˈbɪv.ə.lənt/",pos:"adj.",th:"รู้สึกสองอย่างในเวลาเดียวกัน",ex:"She felt ambivalent about leaving her hometown.",lvl:"hard",exam:["TOEFL"]},
-  {w:"circumvent",ph:"/ˌsɜː.kəmˈvent/",pos:"v.",th:"หลบเลี่ยง, หาทางออก",ex:"He tried to circumvent the regulations.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"coerce",ph:"/kəʊˈɜːs/",pos:"v.",th:"บังคับขู่เข็ญ",ex:"No one should be coerced into signing a contract.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"cogent",ph:"/ˈkəʊ.dʒənt/",pos:"adj.",th:"มีเหตุผลหนักแน่น, น่าเชื่อถือ",ex:"She made a cogent argument for policy reform.",lvl:"hard",exam:["TOEFL"]},
-  {w:"complacent",ph:"/kəmˈpleɪ.sənt/",pos:"adj.",th:"พอใจในตัวเองมากเกินไป",ex:"Success made the team complacent.",lvl:"hard",exam:["TOEFL","TGAT"]},
-  {w:"contentious",ph:"/kənˈten.ʃəs/",pos:"adj.",th:"เป็นที่ถกเถียง, ก้าวร้าว",ex:"The proposal proved highly contentious.",lvl:"hard",exam:["TOEFL"]},
-  {w:"didactic",ph:"/daɪˈdæk.tɪk/",pos:"adj.",th:"มุ่งสั่งสอน, แฝงคติ",ex:"The novel has an overly didactic tone.",lvl:"hard",exam:["TOEFL"]},
-  {w:"disparate",ph:"/ˈdɪs.pər.ɪt/",pos:"adj.",th:"แตกต่างกันมาก",ex:"The report combined disparate data sources.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"ephemeral",ph:"/ɪˈfem.ər.əl/",pos:"adj.",th:"ชั่วคราว, ชั่วแล่น",ex:"Fame can be ephemeral in the digital age.",lvl:"hard",exam:["TOEFL"]},
-  {w:"exacerbate",ph:"/ɪɡˈzæs.ə.beɪt/",pos:"v.",th:"ทำให้แย่ลง, กระตุ้นให้รุนแรง",ex:"Stress can exacerbate health problems.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"jeopardize",ph:"/ˈdʒep.ə.daɪz/",pos:"v.",th:"ทำให้เสี่ยงอันตราย",ex:"Poor planning could jeopardize the mission.",lvl:"hard",exam:["TOEFL","TGAT"]},
-  {w:"meticulous",ph:"/məˈtɪk.jʊ.ləs/",pos:"adj.",th:"ละเอียดถี่ถ้วน, พิถีพิถัน",ex:"She is meticulous about her research methods.",lvl:"hard",exam:["TOEFL"]},
-  {w:"ostensibly",ph:"/ɒˈsten.sɪ.bli/",pos:"adv.",th:"ดูเหมือนว่า, ที่แสดงออกมา",ex:"He was ostensibly calm but actually nervous.",lvl:"hard",exam:["TOEFL"]},
-  {w:"pragmatic",ph:"/præɡˈmæt.ɪk/",pos:"adj.",th:"ปฏิบัตินิยม, มองความเป็นจริง",ex:"We need a pragmatic approach to the issue.",lvl:"hard",exam:["TOEFL","TGAT"]},
-  {w:"quandary",ph:"/ˈkwɒn.dər.i/",pos:"n.",th:"สถานการณ์ที่ลำบาก",ex:"She was in a quandary about what to choose.",lvl:"hard",exam:["TOEFL"]},
-  {w:"scrutinize",ph:"/ˈskruː.tɪ.naɪz/",pos:"v.",th:"ตรวจสอบอย่างละเอียด",ex:"The committee scrutinized every document.",lvl:"hard",exam:["TOEFL","A-Level"]},
-  {w:"superfluous",ph:"/suːˈpɜː.flu.əs/",pos:"adj.",th:"เกินความจำเป็น, ฟุ่มเฟือย",ex:"Cut superfluous words from your essay.",lvl:"hard",exam:["TOEFL"]},
-  {w:"tenacious",ph:"/təˈneɪ.ʃəs/",pos:"adj.",th:"อดทน, ยึดมั่น",ex:"She is tenacious in pursuing her goals.",lvl:"hard",exam:["TOEFL"]},
-  {w:"unanimously",ph:"/juːˈnæn.ɪ.məs.li/",pos:"adv.",th:"เป็นเอกฉันท์",ex:"The board voted unanimously to approve the plan.",lvl:"hard",exam:["TOEFL","TGAT"]},
-  {w:"xenophobia",ph:"/ˌzen.əˈfəʊ.bi.ə/",pos:"n.",th:"ความกลัวหรือเกลียดคนต่างชาติ",ex:"Rising xenophobia threatens social cohesion.",lvl:"hard",exam:["TOEFL"]},
-  {w:"zealous",ph:"/ˈzel.əs/",pos:"adj.",th:"เต็มไปด้วยความมุ่งมั่น",ex:"He was zealous in his efforts to help others.",lvl:"hard",exam:["TOEFL","A-Level"]},
+// ── B1 ──────────────────────────────────────────────────────────────
+{w:"accurate",ph:"/ˈæk.jʊ.rət/",pos:"adj.",th:"ถูกต้อง, แม่นยำ",ex:"The weather forecast was surprisingly accurate.",l:"B1",e:["TGAT","A-Level"]},
+{w:"adapt",ph:"/əˈdæpt/",pos:"v.",th:"ปรับตัว, ดัดแปลง",ex:"You need to adapt to new situations.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"adequate",ph:"/ˈæd.ɪ.kwət/",pos:"adj.",th:"เพียงพอ",ex:"The food supply was adequate for the trip.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"approach",ph:"/əˈprəʊtʃ/",pos:"n/v.",th:"วิธีการ, เข้าใกล้",ex:"Try a different approach.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"assume",ph:"/əˈsjuːm/",pos:"v.",th:"สันนิษฐาน, สมมติ",ex:"Don't assume without evidence.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"bias",ph:"/ˈbaɪ.əs/",pos:"n.",th:"อคติ",ex:"The study was criticized for its bias.",l:"B1",e:["TGAT","A-Level"]},
+{w:"claim",ph:"/kleɪm/",pos:"v/n.",th:"อ้าง, เรียกร้อง",ex:"He claims to be an expert.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"concentrate",ph:"/ˈkɒn.sən.treɪt/",pos:"v.",th:"มีสมาธิ, เข้มข้น",ex:"I can't concentrate with noise.",l:"B1",e:["TGAT","A-Level"]},
+{w:"confuse",ph:"/kənˈfjuːz/",pos:"v.",th:"ทำให้สับสน",ex:"The instructions confused everyone.",l:"B1",e:["TGAT","A-Level"]},
+{w:"consequence",ph:"/ˈkɒn.sɪ.kwəns/",pos:"n.",th:"ผลที่ตามมา",ex:"Think about the consequences first.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"contribute",ph:"/kənˈtrɪb.juːt/",pos:"v.",th:"มีส่วนร่วม, บริจาค",ex:"Everyone can contribute to society.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"convenient",ph:"/kənˈviː.ni.ənt/",pos:"adj.",th:"สะดวก",ex:"Online shopping is very convenient.",l:"B1",e:["TGAT","A-Level"]},
+{w:"critical",ph:"/ˈkrɪt.ɪ.kəl/",pos:"adj.",th:"สำคัญอย่างยิ่ง, วิจารณ์",ex:"Critical thinking is essential.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"debate",ph:"/dɪˈbeɪt/",pos:"n/v.",th:"การโต้เถียง, ถกเถียง",ex:"The debate lasted for two hours.",l:"B1",e:["TGAT","A-Level"]},
+{w:"decrease",ph:"/ˌdiːˈkriːs/",pos:"v/n.",th:"ลดลง",ex:"Crime rates decreased last year.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"define",ph:"/dɪˈfaɪn/",pos:"v.",th:"นิยาม, กำหนด",ex:"Please define the term clearly.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"demand",ph:"/dɪˈmɑːnd/",pos:"n/v.",th:"ความต้องการ, เรียกร้อง",ex:"Demand for housing is rising.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"deny",ph:"/dɪˈnaɪ/",pos:"v.",th:"ปฏิเสธ",ex:"He denied stealing the money.",l:"B1",e:["TGAT","A-Level"]},
+{w:"diverse",ph:"/daɪˈvɜːs/",pos:"adj.",th:"หลากหลาย",ex:"The city has a very diverse culture.",l:"B1",e:["TGAT","A-Level"]},
+{w:"effective",ph:"/ɪˈfek.tɪv/",pos:"adj.",th:"มีประสิทธิภาพ",ex:"This method is very effective.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"effort",ph:"/ˈef.ət/",pos:"n.",th:"ความพยายาม",ex:"Put in more effort next time.",l:"B1",e:["TGAT","A-Level"]},
+{w:"emphasize",ph:"/ˈem.fə.saɪz/",pos:"v.",th:"เน้น",ex:"The report emphasized key findings.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"encourage",ph:"/ɪnˈkʌr.ɪdʒ/",pos:"v.",th:"สนับสนุน, ให้กำลังใจ",ex:"Teachers should encourage students.",l:"B1",e:["TGAT","A-Level"]},
+{w:"environment",ph:"/ɪnˈvaɪ.rən.mənt/",pos:"n.",th:"สิ่งแวดล้อม",ex:"We must protect the environment.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"evaluate",ph:"/ɪˈvæl.ju.eɪt/",pos:"v.",th:"ประเมิน",ex:"Evaluate each option carefully.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"examine",ph:"/ɪɡˈzæm.ɪn/",pos:"v.",th:"ตรวจสอบ, ตรวจ",ex:"The doctor examined the patient.",l:"B1",e:["TGAT","A-Level"]},
+{w:"flexible",ph:"/ˈflek.sɪ.bəl/",pos:"adj.",th:"ยืดหยุ่น",ex:"Be flexible with your schedule.",l:"B1",e:["TGAT","A-Level"]},
+{w:"focus",ph:"/ˈfəʊ.kəs/",pos:"v/n.",th:"มุ่งเน้น",ex:"Focus on what really matters.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"genuine",ph:"/ˈdʒen.ju.ɪn/",pos:"adj.",th:"แท้จริง, จริงใจ",ex:"She showed genuine concern.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"global",ph:"/ˈɡləʊ.bəl/",pos:"adj.",th:"ระดับโลก, ทั่วโลก",ex:"Climate change is a global issue.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"ignore",ph:"/ɪɡˈnɔːr/",pos:"v.",th:"เพิกเฉย, ไม่สนใจ",ex:"Don't ignore warning signs.",l:"B1",e:["TGAT","A-Level"]},
+{w:"impact",ph:"/ˈɪm.pækt/",pos:"n/v.",th:"ผลกระทบ",ex:"Technology has a huge impact on life.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"indicate",ph:"/ˈɪn.dɪ.keɪt/",pos:"v.",th:"บ่งบอก, ชี้ให้เห็น",ex:"The data indicates a problem.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"influence",ph:"/ˈɪn.flu.əns/",pos:"n/v.",th:"อิทธิพล, มีอิทธิพล",ex:"Friends influence your decisions.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"maintain",ph:"/meɪnˈteɪn/",pos:"v.",th:"รักษา, ดูแล",ex:"Maintain a healthy lifestyle.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"obtain",ph:"/əbˈteɪn/",pos:"v.",th:"ได้มา",ex:"You can obtain a visa online.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"overcome",ph:"/ˌəʊ.vəˈkʌm/",pos:"v.",th:"เอาชนะ, ผ่านพ้น",ex:"She overcame many challenges.",l:"B1",e:["TGAT","A-Level"]},
+{w:"prevent",ph:"/prɪˈvent/",pos:"v.",th:"ป้องกัน",ex:"Wash hands to prevent infection.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"process",ph:"/ˈprəʊ.ses/",pos:"n/v.",th:"กระบวนการ, ดำเนินการ",ex:"The process takes about two weeks.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"recognize",ph:"/ˈrek.əɡ.naɪz/",pos:"v.",th:"รู้จัก, ยอมรับ",ex:"I recognized her immediately.",l:"B1",e:["TGAT","A-Level"]},
+{w:"refer",ph:"/rɪˈfɜːr/",pos:"v.",th:"อ้างอิง, หมายถึง",ex:"Refer to page 15 for details.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"relevant",ph:"/ˈrel.ɪ.vənt/",pos:"adj.",th:"เกี่ยวข้อง",ex:"Include only relevant information.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"require",ph:"/rɪˈkwaɪər/",pos:"v.",th:"ต้องการ, กำหนด",ex:"This job requires experience.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"reveal",ph:"/rɪˈviːl/",pos:"v.",th:"เปิดเผย",ex:"The study revealed surprising results.",l:"B1",e:["TGAT","A-Level"]},
+{w:"significant",ph:"/sɪɡˈnɪf.ɪ.kənt/",pos:"adj.",th:"สำคัญ, มีนัยสำคัญ",ex:"There is a significant difference.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"solve",ph:"/sɒlv/",pos:"v.",th:"แก้ปัญหา",ex:"We need to solve this urgently.",l:"B1",e:["TGAT","A-Level"]},
+{w:"specific",ph:"/spəˈsɪf.ɪk/",pos:"adj.",th:"เฉพาะเจาะจง",ex:"Be specific in your answer.",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"sufficient",ph:"/səˈfɪʃ.ənt/",pos:"adj.",th:"เพียงพอ",ex:"Is there sufficient evidence?",l:"B1",e:["TGAT","A-Level","TOEFL"]},
+{w:"vague",ph:"/veɪɡ/",pos:"adj.",th:"คลุมเครือ",ex:"Her answer was too vague.",l:"B1",e:["TGAT","A-Level"]},
+
+// ── B2 ──────────────────────────────────────────────────────────────
+{w:"acknowledge",ph:"/əkˈnɒl.ɪdʒ/",pos:"v.",th:"ยอมรับ, รับทราบ",ex:"He acknowledged his mistake.",l:"B2",e:["TOEFL","A-Level","TGAT"]},
+{w:"adjacent",ph:"/əˈdʒeɪ.sənt/",pos:"adj.",th:"อยู่ติดกัน",ex:"The hotel is adjacent to the beach.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"ambiguous",ph:"/æmˈbɪɡ.ju.əs/",pos:"adj.",th:"กำกวม, มีสองนัย",ex:"The contract was deliberately ambiguous.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"anticipate",ph:"/ænˈtɪs.ɪ.peɪt/",pos:"v.",th:"คาดการณ์ล่วงหน้า",ex:"We anticipate a rise in demand.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"apparent",ph:"/əˈpær.ənt/",pos:"adj.",th:"ชัดเจน, ดูเหมือน",ex:"His confusion was apparent.",l:"B2",e:["TOEFL","A-Level","TGAT"]},
+{w:"arbitrary",ph:"/ˈɑː.bɪ.trər.i/",pos:"adj.",th:"ตามอำเภอใจ, ไม่มีเหตุผล",ex:"The decision seemed arbitrary.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"benevolent",ph:"/bəˈnev.ə.lənt/",pos:"adj.",th:"ใจดี, มีเมตตา",ex:"She was a benevolent leader.",l:"B2",e:["A-Level","TOEFL"]},
+{w:"coincide",ph:"/ˌkəʊ.ɪnˈsaɪd/",pos:"v.",th:"ตรงกัน, เกิดขึ้นพร้อมกัน",ex:"Her views coincide with mine.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"comply",ph:"/kəmˈplaɪ/",pos:"v.",th:"ปฏิบัติตามกฎ",ex:"All staff must comply with policy.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"conceive",ph:"/kənˈsiːv/",pos:"v.",th:"คิดขึ้น, มีแนวคิด",ex:"She conceived a brilliant idea.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"contradict",ph:"/ˌkɒn.trəˈdɪkt/",pos:"v.",th:"ขัดแย้ง",ex:"His story contradicts the evidence.",l:"B2",e:["TGAT","A-Level","TOEFL"]},
+{w:"controversial",ph:"/ˌkɒn.trəˈvɜː.ʃəl/",pos:"adj.",th:"ก่อให้เกิดการโต้เถียง",ex:"The new policy is controversial.",l:"B2",e:["TGAT","A-Level","TOEFL"]},
+{w:"correlate",ph:"/ˈkɒr.ɪ.leɪt/",pos:"v.",th:"มีความสัมพันธ์",ex:"Income correlates with education level.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"deteriorate",ph:"/dɪˈtɪər.i.ə.reɪt/",pos:"v.",th:"เสื่อมถอย",ex:"His health began to deteriorate.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"eloquent",ph:"/ˈel.ə.kwənt/",pos:"adj.",th:"มีวาทศิลป์",ex:"She gave an eloquent speech.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"evident",ph:"/ˈev.ɪ.dənt/",pos:"adj.",th:"ชัดเจน, เห็นได้ชัด",ex:"It was evident she was nervous.",l:"B2",e:["TGAT","A-Level","TOEFL"]},
+{w:"fluctuate",ph:"/ˈflʌk.tʃu.eɪt/",pos:"v.",th:"ผันแปร, ขึ้นลง",ex:"Prices fluctuate with demand.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"imminent",ph:"/ˈɪm.ɪ.nənt/",pos:"adj.",th:"ใกล้จะเกิดขึ้น",ex:"Danger is imminent.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"implicit",ph:"/ɪmˈplɪs.ɪt/",pos:"adj.",th:"โดยนัย, ไม่ได้พูดตรงๆ",ex:"There was an implicit threat.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"inevitable",ph:"/ɪnˈev.ɪ.tə.bəl/",pos:"adj.",th:"หลีกเลี่ยงไม่ได้",ex:"Change is inevitable.",l:"B2",e:["TOEFL","A-Level","TGAT"]},
+{w:"inherent",ph:"/ɪnˈhɪər.ənt/",pos:"adj.",th:"โดยเนื้อแท้, มีอยู่ในตัว",ex:"There are inherent risks in the plan.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"notorious",ph:"/nəʊˈtɔː.ri.əs/",pos:"adj.",th:"มีชื่อเสียงในทางเสีย",ex:"The area is notorious for crime.",l:"B2",e:["TGAT","A-Level"]},
+{w:"obsolete",ph:"/ˌɒb.səˈliːt/",pos:"adj.",th:"ล้าสมัย",ex:"This technology is now obsolete.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"perceive",ph:"/pəˈsiːv/",pos:"v.",th:"รับรู้, มองว่า",ex:"She perceived it as a threat.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"persist",ph:"/pəˈsɪst/",pos:"v.",th:"ยังคงอยู่, ยืนหยัด",ex:"The problem persists despite efforts.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"plausible",ph:"/ˈplɔː.zɪ.bəl/",pos:"adj.",th:"ดูสมเหตุสมผล, น่าเชื่อถือ",ex:"That explanation seems plausible.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"reinforce",ph:"/ˌriː.ɪnˈfɔːs/",pos:"v.",th:"เสริมกำลัง",ex:"The data reinforces the theory.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"resilient",ph:"/rɪˈzɪl.i.ənt/",pos:"adj.",th:"ฟื้นตัวได้ดี",ex:"She is very resilient under pressure.",l:"B2",e:["TOEFL","A-Level","TGAT"]},
+{w:"restrain",ph:"/rɪˈstreɪn/",pos:"v.",th:"ยับยั้ง, ควบคุม",ex:"He struggled to restrain his anger.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"scrutiny",ph:"/ˈskruː.tɪ.ni/",pos:"n.",th:"การตรวจสอบอย่างละเอียด",ex:"The plan is under intense scrutiny.",l:"B2",e:["TOEFL","A-Level"]},
+{w:"skeptical",ph:"/ˈskep.tɪ.kəl/",pos:"adj.",th:"สงสัย, ไม่เชื่อง่าย",ex:"I'm skeptical about this claim.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"suppress",ph:"/səˈpres/",pos:"v.",th:"ปราบปราม, ระงับ",ex:"He tried to suppress his emotions.",l:"B2",e:["TOEFL","TGAT"]},
+{w:"sustain",ph:"/səˈsteɪn/",pos:"v.",th:"รักษาต่อเนื่อง, ค้ำจุน",ex:"We must sustain economic growth.",l:"B2",e:["TOEFL","A-Level","TGAT"]},
+{w:"withhold",ph:"/wɪðˈhəʊld/",pos:"v.",th:"ปิดบัง, กักเก็บ",ex:"She withheld the information.",l:"B2",e:["TOEFL","A-Level"]},
+
+// ── C1 ──────────────────────────────────────────────────────────────
+{w:"alleviate",ph:"/əˈliː.vi.eɪt/",pos:"v.",th:"บรรเทา",ex:"The medicine alleviated the pain.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"ambivalent",ph:"/æmˈbɪv.ə.lənt/",pos:"adj.",th:"รู้สึกสองอย่างพร้อมกัน",ex:"She felt ambivalent about leaving.",l:"C1",e:["TOEFL"]},
+{w:"ameliorate",ph:"/əˈmiː.li.ə.reɪt/",pos:"v.",th:"ทำให้ดีขึ้น",ex:"Steps were taken to ameliorate poverty.",l:"C1",e:["TOEFL"]},
+{w:"anachronistic",ph:"/əˌnæk.rəˈnɪs.tɪk/",pos:"adj.",th:"ล้าสมัย, ไม่ตรงยุค",ex:"The law seems anachronistic today.",l:"C1",e:["TOEFL"]},
+{w:"anomaly",ph:"/əˈnɒm.ə.li/",pos:"n.",th:"สิ่งผิดปกติ",ex:"The data showed a clear anomaly.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"circumvent",ph:"/ˌsɜː.kəmˈvent/",pos:"v.",th:"หลบเลี่ยง",ex:"He tried to circumvent the rules.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"cogent",ph:"/ˈkəʊ.dʒənt/",pos:"adj.",th:"มีเหตุผลน่าเชื่อ",ex:"She made a cogent argument.",l:"C1",e:["TOEFL"]},
+{w:"complacent",ph:"/kəmˈpleɪ.sənt/",pos:"adj.",th:"พอใจในตัวเองเกินไป",ex:"Success made them complacent.",l:"C1",e:["TOEFL","TGAT"]},
+{w:"contentious",ph:"/kənˈten.ʃəs/",pos:"adj.",th:"เป็นที่ถกเถียง",ex:"The proposal proved contentious.",l:"C1",e:["TOEFL"]},
+{w:"corroborate",ph:"/kəˈrɒb.ə.reɪt/",pos:"v.",th:"สนับสนุน, ยืนยัน",ex:"Witnesses corroborated his story.",l:"C1",e:["TOEFL"]},
+{w:"didactic",ph:"/daɪˈdæk.tɪk/",pos:"adj.",th:"แฝงคติสั่งสอน",ex:"The novel has a didactic tone.",l:"C1",e:["TOEFL"]},
+{w:"disparate",ph:"/ˈdɪs.pər.ɪt/",pos:"adj.",th:"แตกต่างกันมาก",ex:"They combined disparate ideas.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"ephemeral",ph:"/ɪˈfem.ər.əl/",pos:"adj.",th:"ชั่วคราว, ชั่วแล่น",ex:"Fame can be ephemeral.",l:"C1",e:["TOEFL"]},
+{w:"exacerbate",ph:"/ɪɡˈzæs.ə.beɪt/",pos:"v.",th:"ทำให้แย่ลง",ex:"Stress can exacerbate illness.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"expedite",ph:"/ˈek.spɪ.daɪt/",pos:"v.",th:"เร่งรัด, ทำให้เร็วขึ้น",ex:"We need to expedite the process.",l:"C1",e:["TOEFL"]},
+{w:"frivolous",ph:"/ˈfrɪv.ə.ləs/",pos:"adj.",th:"ไร้สาระ, ไม่จริงจัง",ex:"Don't waste time on frivolous matters.",l:"C1",e:["TOEFL"]},
+{w:"gregarious",ph:"/ɡrɪˈɡeər.i.əs/",pos:"adj.",th:"ชอบสังคม, เข้าสังคมง่าย",ex:"She is very gregarious by nature.",l:"C1",e:["TOEFL"]},
+{w:"incongruous",ph:"/ɪnˈkɒŋ.ɡru.əs/",pos:"adj.",th:"ไม่เข้ากัน, ดูผิดที่",ex:"His formal suit looked incongruous.",l:"C1",e:["TOEFL"]},
+{w:"indiscriminate",ph:"/ˌɪn.dɪˈskrɪm.ɪ.nət/",pos:"adj.",th:"ไม่เลือกหน้า, สุ่มสี่สุ่มห้า",ex:"Indiscriminate use of antibiotics is dangerous.",l:"C1",e:["TOEFL"]},
+{w:"jeopardize",ph:"/ˈdʒep.ə.daɪz/",pos:"v.",th:"ทำให้เสี่ยงอันตราย",ex:"This could jeopardize the mission.",l:"C1",e:["TOEFL","TGAT"]},
+{w:"meticulous",ph:"/məˈtɪk.jʊ.ləs/",pos:"adj.",th:"ละเอียดถี่ถ้วน",ex:"She is meticulous in her research.",l:"C1",e:["TOEFL"]},
+{w:"mitigate",ph:"/ˈmɪt.ɪ.ɡeɪt/",pos:"v.",th:"บรรเทา, ลดความรุนแรง",ex:"Steps were taken to mitigate risk.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"ostensibly",ph:"/ɒˈsten.sɪ.bli/",pos:"adv.",th:"ที่แสดงออกมา, ดูเหมือนว่า",ex:"He was ostensibly calm.",l:"C1",e:["TOEFL"]},
+{w:"perfunctory",ph:"/pəˈfʌŋk.tər.i/",pos:"adj.",th:"ทำไปงั้น, ขาดความตั้งใจ",ex:"He gave a perfunctory nod.",l:"C1",e:["TOEFL"]},
+{w:"pragmatic",ph:"/præɡˈmæt.ɪk/",pos:"adj.",th:"ปฏิบัตินิยม",ex:"We need a pragmatic solution.",l:"C1",e:["TOEFL","TGAT"]},
+{w:"proliferate",ph:"/prəˈlɪf.ər.eɪt/",pos:"v.",th:"เพิ่มขึ้นอย่างรวดเร็ว",ex:"Social media platforms have proliferated.",l:"C1",e:["TOEFL"]},
+{w:"quandary",ph:"/ˈkwɒn.dər.i/",pos:"n.",th:"สถานการณ์ที่ลำบาก",ex:"She was in a real quandary.",l:"C1",e:["TOEFL"]},
+{w:"recalcitrant",ph:"/rɪˈkæl.sɪ.trənt/",pos:"adj.",th:"ดื้อดึง, ไม่ยอมตาม",ex:"The recalcitrant student refused to cooperate.",l:"C1",e:["TOEFL"]},
+{w:"rectify",ph:"/ˈrek.tɪ.faɪ/",pos:"v.",th:"แก้ไข, ทำให้ถูกต้อง",ex:"We must rectify this error immediately.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"scrutinize",ph:"/ˈskruː.tɪ.naɪz/",pos:"v.",th:"ตรวจสอบอย่างละเอียด",ex:"The committee scrutinized every document.",l:"C1",e:["TOEFL","A-Level"]},
+{w:"spurious",ph:"/ˈspjʊər.i.əs/",pos:"adj.",th:"ปลอม, ไม่แท้จริง",ex:"He made a spurious claim.",l:"C1",e:["TOEFL"]},
+{w:"superfluous",ph:"/suːˈpɜː.flu.əs/",pos:"adj.",th:"เกินความจำเป็น",ex:"Remove all superfluous words.",l:"C1",e:["TOEFL"]},
+{w:"tenacious",ph:"/təˈneɪ.ʃəs/",pos:"adj.",th:"อดทน, ยึดมั่น",ex:"She is tenacious in her goals.",l:"C1",e:["TOEFL"]},
+{w:"ubiquitous",ph:"/juːˈbɪk.wɪ.təs/",pos:"adj.",th:"มีอยู่ทุกหนทุกแห่ง",ex:"Smartphones are now ubiquitous.",l:"C1",e:["TOEFL"]},
+{w:"unanimously",ph:"/juːˈnæn.ɪ.məs.li/",pos:"adv.",th:"เป็นเอกฉันท์",ex:"They voted unanimously to approve.",l:"C1",e:["TOEFL","TGAT"]},
+{w:"zealous",ph:"/ˈzel.əs/",pos:"adj.",th:"เต็มไปด้วยความมุ่งมั่น",ex:"He is zealous about his work.",l:"C1",e:["TOEFL","A-Level"]},
 ];
 
-const LEVEL_MAP = {all: null, easy:'easy', med:'med', hard:'hard'};
-let level = 'all';
-let mode = 'flash';
-let pool = [], idx = 0, known = new Set(), streak = 0, flipped = false;
+document.getElementById('word-count').textContent = V.length;
 
-// Quiz state
-let qList = [], qIdx = 0, qScore = 0, qAnswered = false;
+let level='all', mode='flash';
+let pool=[], idx=0, known=new Set(), streak=0, flipped=false;
+let qList=[], qIdx=0, qScore=0, qAns=false;
+let mSelW=null, mSelD=null, mPairs=[], mDone=new Set();
 
-// Match state
-let mSelW = null, mSelD = null, mPairs = [], mDone = new Set();
+function sh(a){let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function getPool(){return sh(level==='all'?V:V.filter(v=>v.l===level));}
+function upStats(){document.getElementById('s-total').textContent=pool.length;document.getElementById('s-known').textContent=known.size;document.getElementById('s-streak').textContent=streak;}
+function ltagClass(l){return `ltag-${l.toLowerCase()}`;}
 
-function getPool() {
-  let base = level === 'all' ? VOCAB : VOCAB.filter(v => v.lvl === level);
-  return shuffle(base);
+// FLASH
+function loadCard(){
+  if(!pool.length)return;
+  let v=pool[idx%pool.length];
+  document.getElementById('fw').textContent=v.w;
+  document.getElementById('fph').textContent=v.ph;
+  document.getElementById('fm').textContent=v.th;
+  document.getElementById('fpos').textContent=v.pos;
+  document.getElementById('fex').textContent='"'+v.ex+'"';
+  ['fm','fpos','fex'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('fhint').style.display='block';
+  let tags=v.e.map(e=>`<span class="tag etag">${e}</span>`).join('');
+  tags+=`<span class="tag ${ltagClass(v.l)}">${v.l}</span>`;
+  document.getElementById('ftags').innerHTML=tags;
+  document.getElementById('fp').style.width=Math.round(idx/pool.length*100)+'%';
+  flipped=false; upStats();
 }
-function shuffle(a) {
-  let b=[...a];
-  for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
-  return b;
+function flip(){
+  flipped=!flipped;
+  ['fm','fpos','fex'].forEach(id=>document.getElementById(id).style.display=flipped?'block':'none');
+  document.getElementById('fhint').style.display=flipped?'none':'block';
 }
-function updateStats() {
-  document.getElementById('s-total').textContent = pool.length;
-  document.getElementById('s-known').textContent = known.size;
-  document.getElementById('s-streak').textContent = streak;
-}
-
-// ---- FLASHCARD ----
-function loadCard() {
-  if (!pool.length) return;
-  let v = pool[idx % pool.length];
-  document.getElementById('f-word').textContent = v.w;
-  document.getElementById('f-ph').textContent = v.ph;
-  document.getElementById('f-meaning').textContent = v.th;
-  document.getElementById('f-pos').textContent = v.pos;
-  document.getElementById('f-ex').textContent = '"' + v.ex + '"';
-  document.getElementById('f-meaning').style.display = 'none';
-  document.getElementById('f-pos').style.display = 'none';
-  document.getElementById('f-ex').style.display = 'none';
-  document.getElementById('f-hint').style.display = 'block';
-  let tags = v.exam.map(e=>`<span class="tag exam-tag">${e}</span>`).join('');
-  tags += `<span class="tag">${v.lvl}</span>`;
-  document.getElementById('f-tags').innerHTML = tags;
-  let pct = Math.round((idx/pool.length)*100);
-  document.getElementById('f-prog').style.width = pct+'%';
-  flipped = false;
-  updateStats();
-}
-function flipCard() {
-  flipped = !flipped;
-  ['f-meaning','f-pos','f-ex'].forEach(id => document.getElementById(id).style.display = flipped?'block':'none');
-  document.getElementById('f-hint').style.display = flipped?'none':'block';
-}
-function markCard(ok) {
-  let v = pool[idx%pool.length];
+function mark(ok){
+  let v=pool[idx%pool.length];
   if(ok){known.add(v.w);streak++;}else{known.delete(v.w);streak=0;}
   nextCard();
 }
-function nextCard() {
-  idx=(idx+1)%pool.length; loadCard();
-}
+function nextCard(){idx=(idx+1)%pool.length;loadCard();}
 
-// ---- QUIZ ----
-function startQuiz() {
-  pool = getPool();
-  qList = pool.slice(0, Math.min(15, pool.length));
-  qIdx = 0; qScore = 0;
-  document.getElementById('q-body').style.display = 'block';
-  document.getElementById('q-result').style.display = 'none';
+// QUIZ
+function startQuiz(){
+  pool=getPool();
+  qList=pool.slice(0,Math.min(15,pool.length));
+  qIdx=0;qScore=0;
+  document.getElementById('qbody').style.display='block';
+  document.getElementById('qres').style.display='none';
   loadQuiz();
 }
-function loadQuiz() {
-  if(qIdx >= qList.length){ showResult(); return; }
-  qAnswered = false;
-  let v = qList[qIdx];
-  document.getElementById('q-word').textContent = v.w;
-  document.getElementById('q-ph').textContent = v.ph;
-  let tags = v.exam.map(e=>`<span class="tag exam-tag">${e}</span>`).join('') + `<span class="tag">${v.lvl}</span>`;
-  document.getElementById('q-tags').innerHTML = tags;
-  document.getElementById('q-next').style.display = 'none';
-  let pct = Math.round((qIdx/qList.length)*100);
-  document.getElementById('q-prog').style.width = pct+'%';
-  let wrong = shuffle(VOCAB.filter(x=>x.w!==v.w)).slice(0,3).map(x=>x.th);
-  let opts = shuffle([v.th, ...wrong]);
-  let c = document.getElementById('q-opts');
-  c.innerHTML = '';
-  opts.forEach(o => {
-    let b = document.createElement('button');
-    b.className = 'opt'; b.textContent = o;
-    b.onclick = () => checkOpt(b, o, v.th);
-    c.appendChild(b);
+function loadQuiz(){
+  if(qIdx>=qList.length){showResult();return;}
+  qAns=false;
+  let v=qList[qIdx];
+  document.getElementById('qw').textContent=v.w;
+  document.getElementById('qph').textContent=v.ph;
+  let tags=v.e.map(e=>`<span class="tag etag">${e}</span>`).join('')+`<span class="tag ${ltagClass(v.l)}">${v.l}</span>`;
+  document.getElementById('qtags').innerHTML=tags;
+  document.getElementById('qnx').style.display='none';
+  document.getElementById('qp').style.width=Math.round(qIdx/qList.length*100)+'%';
+  let wrongs=sh(V.filter(x=>x.w!==v.w)).slice(0,3).map(x=>x.th);
+  let opts=sh([v.th,...wrongs]);
+  let c=document.getElementById('qopts');c.innerHTML='';
+  opts.forEach(o=>{
+    let b=document.createElement('button');b.className='opt';b.textContent=o;
+    b.onclick=()=>checkOpt(b,o,v.th);c.appendChild(b);
   });
 }
-function checkOpt(btn, chosen, correct) {
-  if(qAnswered) return; qAnswered = true;
-  document.querySelectorAll('.opt').forEach(b => {
-    b.disabled = true;
-    if(b.textContent===correct) b.classList.add('correct');
-    else if(b===btn) b.classList.add('wrong');
+function checkOpt(btn,chosen,correct){
+  if(qAns)return;qAns=true;
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===correct)b.classList.add('ok');
+    else if(b===btn)b.classList.add('ng');
   });
   if(chosen===correct){qScore++;streak++;}else{streak=0;}
-  updateStats();
-  document.getElementById('q-next').style.display = 'block';
+  upStats();document.getElementById('qnx').style.display='block';
 }
-function nextQuiz() { qIdx++; loadQuiz(); }
-function showResult() {
-  document.getElementById('q-body').style.display = 'none';
-  document.getElementById('q-result').style.display = 'block';
-  document.getElementById('q-prog').style.width = '100%';
-  document.getElementById('r-score').textContent = qScore+'/'+qList.length;
-  let pct = Math.round(qScore/qList.length*100);
-  let msg = pct>=80?'🎉 เก่งมากเลย!':pct>=50?'💪 พยายามต่อไปนะ':'📖 ลองทบทวนอีกครั้ง';
-  document.getElementById('r-sub').textContent = msg;
+function nextQuiz(){qIdx++;loadQuiz();}
+function showResult(){
+  document.getElementById('qbody').style.display='none';
+  document.getElementById('qres').style.display='block';
+  document.getElementById('qp').style.width='100%';
+  document.getElementById('rscore').textContent=qScore+'/'+qList.length;
+  let p=Math.round(qScore/qList.length*100);
+  document.getElementById('rsub').textContent=p>=80?'🎉 เก่งมากเลย!':p>=50?'💪 พยายามต่อไป':'📖 ลองทบทวนอีกครั้ง';
 }
-function restartQuiz() { startQuiz(); }
 
-// ---- MATCH ----
-function startMatch() {
-  mSelW = null; mSelD = null; mDone = new Set();
-  let p = shuffle(getPool()).slice(0,6);
-  mPairs = p.map(v=>({w:v.w, th:v.th}));
-  let defs = shuffle(mPairs.map(x=>x.th));
-  let wc = document.getElementById('mc-words');
-  let dc = document.getElementById('mc-defs');
-  wc.innerHTML = ''; dc.innerHTML = '';
-  mPairs.forEach(p => {
-    let b = document.createElement('button');
-    b.className='mbtn'; b.textContent=p.w; b.dataset.w=p.w;
-    b.onclick=()=>selW(b); wc.appendChild(b);
+// MATCH
+function startMatch(){
+  mSelW=null;mSelD=null;mDone=new Set();
+  let p=sh(getPool()).slice(0,6);
+  mPairs=p.map(v=>({w:v.w,th:v.th}));
+  let defs=sh(mPairs.map(x=>x.th));
+  let wc=document.getElementById('mw'),dc=document.getElementById('md');
+  wc.innerHTML='';dc.innerHTML='';
+  mPairs.forEach(p=>{
+    let b=document.createElement('button');b.className='mb';b.textContent=p.w;b.dataset.w=p.w;
+    b.onclick=()=>selW(b);wc.appendChild(b);
   });
-  defs.forEach(d => {
-    let b = document.createElement('button');
-    b.className='mbtn'; b.textContent=d; b.dataset.d=d;
-    b.onclick=()=>selD(b); dc.appendChild(b);
+  defs.forEach(d=>{
+    let b=document.createElement('button');b.className='mb';b.textContent=d;b.dataset.d=d;
+    b.onclick=()=>selD(b);dc.appendChild(b);
   });
-  document.getElementById('match-msg').textContent = '';
+  document.getElementById('mmsg').textContent='';
 }
-function selW(btn) {
-  if(btn.classList.contains('matched')) return;
-  document.querySelectorAll('#mc-words .mbtn').forEach(b=>b.classList.remove('sel'));
-  mSelW = btn; btn.classList.add('sel'); tryMatch();
+function selW(btn){
+  if(btn.classList.contains('matched'))return;
+  document.querySelectorAll('#mw .mb').forEach(b=>b.classList.remove('sel'));
+  mSelW=btn;btn.classList.add('sel');tryMatch();
 }
-function selD(btn) {
-  if(btn.classList.contains('matched')) return;
-  document.querySelectorAll('#mc-defs .mbtn').forEach(b=>b.classList.remove('sel'));
-  mSelD = btn; btn.classList.add('sel'); tryMatch();
+function selD(btn){
+  if(btn.classList.contains('matched'))return;
+  document.querySelectorAll('#md .mb').forEach(b=>b.classList.remove('sel'));
+  mSelD=btn;btn.classList.add('sel');tryMatch();
 }
-function tryMatch() {
-  if(!mSelW||!mSelD) return;
-  let w = mSelW.dataset.w, d = mSelD.dataset.d;
-  let pair = mPairs.find(p=>p.w===w);
-  if(pair && pair.th===d) {
-    mSelW.classList.remove('sel'); mSelD.classList.remove('sel');
-    mSelW.classList.add('matched'); mSelD.classList.add('matched');
-    mSelW.disabled=true; mSelD.disabled=true;
-    mDone.add(w); streak++; updateStats();
-    if(mDone.size===mPairs.length) document.getElementById('match-msg').textContent='🎉 ครบแล้ว! กด "ชุดใหม่" เพื่อเล่นต่อ';
-  } else {
-    mSelW.classList.add('err'); mSelD.classList.add('err');
-    streak=0; updateStats();
-    setTimeout(()=>{
-      mSelW.classList.remove('sel','err'); mSelD.classList.remove('sel','err');
-    },500);
+function tryMatch(){
+  if(!mSelW||!mSelD)return;
+  let w=mSelW.dataset.w,d=mSelD.dataset.d;
+  let pair=mPairs.find(p=>p.w===w);
+  if(pair&&pair.th===d){
+    mSelW.classList.remove('sel');mSelD.classList.remove('sel');
+    mSelW.classList.add('matched');mSelD.classList.add('matched');
+    mSelW.disabled=true;mSelD.disabled=true;
+    mDone.add(w);streak++;upStats();
+    if(mDone.size===mPairs.length)document.getElementById('mmsg').textContent='🎉 ครบแล้ว! กด "ชุดใหม่" เพื่อเล่นต่อ';
+  }else{
+    mSelW.classList.add('err');mSelD.classList.add('err');
+    streak=0;upStats();
+    setTimeout(()=>{mSelW.classList.remove('sel','err');mSelD.classList.remove('sel','err');},500);
   }
-  mSelW=null; mSelD=null;
+  mSelW=null;mSelD=null;
 }
 
-// ---- MODE SWITCH ----
-function switchMode(m) {
-  mode = m;
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['flash','quiz','match'][i]===m));
-  document.getElementById('m-flash').classList.toggle('hidden', m!=='flash');
-  document.getElementById('m-quiz').classList.toggle('hidden', m!=='quiz');
-  document.getElementById('m-match').classList.toggle('hidden', m!=='match');
-  if(m==='flash'){ pool=getPool(); idx=0; loadCard(); }
-  else if(m==='quiz') startQuiz();
-  else if(m==='match') startMatch();
+// MODE / LEVEL
+function switchMode(m){
+  mode=m;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',['flash','quiz','match'][i]===m));
+  document.getElementById('m-flash').classList.toggle('hidden',m!=='flash');
+  document.getElementById('m-quiz').classList.toggle('hidden',m!=='quiz');
+  document.getElementById('m-match').classList.toggle('hidden',m!=='match');
+  if(m==='flash'){pool=getPool();idx=0;loadCard();}
+  else if(m==='quiz')startQuiz();
+  else startMatch();
 }
-
-function setLevel(l) {
-  level = l;
-  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  known=new Set(); streak=0;
+function setLevel(l){
+  level=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  event.target.classList.add('on');
+  known=new Set();streak=0;
   switchMode(mode);
 }
 
-// Init
-pool = getPool();
-updateStats();
-loadCard();
+pool=getPool();upStats();loadCard();
 </script>
 </body>
 </html>
