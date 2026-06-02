@@ -168,6 +168,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="mw"></div>
       <div id="md"></div>
     </div>
+    <div id="mmsg" style="text-align:center;font-size:13px;color:var(--green);font-weight:600;min-height:20px;margin-bottom:.75rem;"></div>
     <button class="btno" onclick="startMatch()">🔀 ชุดใหม่</button>
   </div>
 </div>
@@ -228,7 +229,50 @@ function nextQuiz(){qIdx++;loadQuiz();}
 function startSpeed(){let p=sh(getPool()).slice(0,20);let idx=0;function load(){if(idx>=p.length)return;let v=p[idx++];document.getElementById('sp-word').textContent=v[0];document.getElementById('sp-tags').innerHTML=tagHtml(v);let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let c=document.getElementById('sp-opts');c.innerHTML='';sh([v[2],...wrongs]).forEach(o=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>{if(o===v[2]){combo++;document.getElementById('sp-combo').textContent=combo+' ถูก';}else combo=0;upStats();load();};c.appendChild(b);});} document.getElementById('speed-start').style.display='none';document.getElementById('speed-play').classList.remove('hidden');load();}
 
 // MATCH
-function startMatch(){let p=sh(getPool()).slice(0,6);let mPairs=p.map(v=>({w:v[0],th:v[2]}));let defs=sh(mPairs.map(x=>x.th));let wc=document.getElementById('mw'),dc=document.getElementById('md');wc.innerHTML='';dc.innerHTML='';mPairs.forEach(p=>{let b=document.createElement('button');b.className='mb';b.textContent=p.w;b.onclick=()=>{b.classList.add('sel');};wc.appendChild(b);});defs.forEach(d=>{let b=document.createElement('button');b.className='mb';b.textContent=d;dc.appendChild(b);});}
+let mSelW=null,mSelD=null,mPairs=[],mDone=new Set();
+function startMatch(){
+  mSelW=null;mSelD=null;mDone=new Set();
+  let p=sh(getPool()).slice(0,6);
+  mPairs=p.map(v=>({w:v[0],th:v[2]}));
+  let defs=sh(mPairs.map(x=>x.th));
+  let wc=document.getElementById('mw'),dc=document.getElementById('md');
+  wc.innerHTML='';dc.innerHTML='';
+  document.getElementById('mmsg').textContent='';
+  mPairs.forEach(pair=>{
+    let b=document.createElement('button');b.className='mb';
+    b.textContent=pair.w;b.dataset.word=pair.w;
+    b.onclick=()=>selW(b);wc.appendChild(b);
+  });
+  defs.forEach(d=>{
+    let b=document.createElement('button');b.className='mb';
+    b.textContent=d;b.dataset.def=d;
+    b.onclick=()=>selD(b);dc.appendChild(b);
+  });
+}
+function selW(btn){
+  if(btn.classList.contains('matched'))return;
+  document.querySelectorAll('#mw .mb').forEach(b=>b.classList.remove('sel'));
+  mSelW=btn;btn.classList.add('sel');tryMatch();
+}
+function selD(btn){
+  if(btn.classList.contains('matched'))return;
+  document.querySelectorAll('#md .mb').forEach(b=>b.classList.remove('sel'));
+  mSelD=btn;btn.classList.add('sel');tryMatch();
+}
+function tryMatch(){
+  if(!mSelW||!mSelD)return;
+  let pair=mPairs.find(p=>p.w===mSelW.dataset.word);
+  if(pair&&pair.th===mSelD.dataset.def){
+    [mSelW,mSelD].forEach(b=>{b.classList.remove('sel');b.classList.add('matched');b.disabled=true;});
+    mDone.add(mSelW.dataset.word);combo++;saveStreak();upStats();
+    if(mDone.size===mPairs.length)document.getElementById('mmsg').textContent='🎉 ครบแล้ว! กด "ชุดใหม่" เล่นต่อ';
+  }else{
+    [mSelW,mSelD].forEach(b=>b.classList.add('err'));
+    combo=0;upStats();
+    setTimeout(()=>{if(mSelW)mSelW.classList.remove('sel','err');if(mSelD)mSelD.classList.remove('sel','err');},600);
+  }
+  mSelW=null;mSelD=null;
+}
 
 // MODE
 function switchMode(m){mode=m;['flash','quiz','speed','match'].forEach(x=>document.getElementById('m-'+x).classList.toggle('hidden',x!==m));['flash','quiz','speed','match'].forEach(x=>document.getElementById('tab-'+x)?.classList.toggle('on',x===m));if(m==='flash'){pool=getPool();idx=0;loadCard();}else if(m==='quiz')startQuiz();else if(m==='speed'){document.getElementById('speed-start').style.display='block';document.getElementById('speed-play').classList.add('hidden');}else if(m==='match')startMatch();}
