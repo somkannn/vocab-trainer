@@ -50,6 +50,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cm{font-size:16px;font-weight:600;margin-top:14px;display:none;line-height:1.3;}
 .cpos{font-size:11px;color:var(--text3);margin-top:3px;display:none;}
 .cex{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6;font-style:italic;display:none;}
+.csyn{font-size:11px;color:var(--text2);margin-top:8px;line-height:1.6;}
+.csyn span.lbl{font-weight:700;color:var(--text);font-size:10px;text-transform:uppercase;letter-spacing:.5px;}
+.ccol{font-size:11px;color:var(--accent);margin-top:4px;font-style:italic;}
 .chint{font-size:11px;color:var(--text3);margin-top:14px;}
 .cbtns{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;margin-bottom:1.5rem;}
 .cb{padding:10px 14px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;font-size:13px;cursor:pointer;color:var(--text);transition:all .12s;font-weight:500;}
@@ -130,6 +133,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="cpos" id="fpos"></div>
         <div class="cex" id="fex"></div>
         <div class="chint" id="fhint">แตะเพื่อดูความหมาย</div>
+        <div class="csyn" id="fsyn" style="display:none"></div>
+        <div class="ccol" id="fcol" style="display:none"></div>
       </div>
     </div>
     <div class="cbtns">
@@ -253,8 +258,31 @@ window.addEventListener('mousemove',e=>{if(isDrag)pMove(e);});
 window.addEventListener('mouseup',pEnd);
 
 // FLASHCARD
-function loadCard(){if(!pool.length)return;let v=pool[idx%pool.length];document.getElementById('fw').textContent=v[0];document.getElementById('fm').textContent=v[2];document.getElementById('fpos').textContent=v[1];document.getElementById('fex').textContent='"'+v[3]+'"';['fm','fpos','fex'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('fhint').style.display='block';document.getElementById('ftags').innerHTML=tagHtml(v);document.getElementById('fp').style.width=Math.round(idx/pool.length*100)+'%';flipped=false;upStats();}
-function flip(){flipped=!flipped;['fm','fpos','fex'].forEach(id=>document.getElementById(id).style.display=flipped?'block':'none');document.getElementById('fhint').style.display=flipped?'none':'block';}
+function loadCard(){
+  if(!pool.length)return;
+  let v=pool[idx%pool.length];
+  document.getElementById('fw').textContent=v[0];
+  document.getElementById('fm').textContent=v[2];
+  document.getElementById('fpos').textContent=v[1];
+  document.getElementById('fex').textContent='"'+v[3]+'"';
+  // Synonyms/antonyms
+  let synEl=document.getElementById('fsyn');
+  let syn=v[5]&&v[5]!=='—'?v[5].split('|').slice(0,3).join(', '):'';
+  let ant=v[6]&&v[6]!=='—'?v[6].split('|').slice(0,2).join(', '):'';
+  if(syn||ant){
+    synEl.innerHTML=(syn?'<span class="lbl">≈ </span>'+syn:'')+(ant?' &nbsp;<span class="lbl">≠ </span>'+ant:'');
+  } else synEl.innerHTML='';
+  // Collocations
+  let colEl=document.getElementById('fcol');
+  let col=v[7]&&v[7]!=='—'?v[7].split('|').slice(0,2).join(' · '):'';
+  colEl.textContent=col?'📎 '+col:'';
+  ['fm','fpos','fex','fsyn','fcol'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('fhint').style.display='block';
+  document.getElementById('ftags').innerHTML=tagHtml(v);
+  document.getElementById('fp').style.width=Math.round(idx/pool.length*100)+'%';
+  flipped=false;upStats();
+}
+function flip(){flipped=!flipped;['fm','fpos','fex','fsyn','fcol'].forEach(id=>document.getElementById(id).style.display=flipped?'block':'none');document.getElementById('fhint').style.display=flipped?'none':'block';}
 function mark(ok){let v=pool[idx%pool.length];if(ok){known.add(v[0]);combo++;saveStreak();}else{known.delete(v[0]);combo=0;}pReset();nextCard();}
 function nextCard(){idx=(idx+1)%pool.length;loadCard();}
 
