@@ -77,6 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="hdr">
     <div class="logo">Vocab<em>Up</em></div>
     <div class="streak-badge">🔥 <span id="streak-num">0</span> วัน</div>
+    <div id="srs-badge" style="font-size:12px;color:var(--text2);padding:4px 10px;background:var(--bg2);border-radius:20px;border:1px solid var(--border);">📚 โหลด...</div>
   </div>
 
   <div class="exam-bar">
@@ -187,13 +188,46 @@ let qList=[], qIdx=0, qScore=0, qAns=false;
 
 let dailyStreak=parseInt(localStorage.getItem('vs'))||0;
 let lastDate=localStorage.getItem('vd')||'';
+
+// SRS system
+const SRS_INTERVALS=[1,3,7,14,30,90];
+function srsData(){try{return JSON.parse(localStorage.getItem('srs')||'{}')}catch{return {}}}
+function saveSRS(d){localStorage.setItem('srs',JSON.stringify(d))}
+function srsUpdate(word,correct){
+  let d=srsData();
+  let w=d[word]||{lvl:0,next:0};
+  if(correct){w.lvl=Math.min(w.lvl+1,SRS_INTERVALS.length-1);}
+  else{w.lvl=Math.max(w.lvl-1,0);}
+  let days=SRS_INTERVALS[w.lvl];
+  w.next=Date.now()+days*86400000;
+  d[word]=w;saveSRS(d);
+}
+function srsDue(){
+  let d=srsData();now=Date.now();
+  return VOCAB.filter(v=>d[v[0]]&&d[v[0]].next<=now);
+}
+function srsNew(){
+  let d=srsData();
+  return VOCAB.filter(v=>!d[v[0]]);
+}
 const today=new Date().toDateString();
 if(lastDate!==today){const yesterday=new Date(Date.now()-86400000).toDateString();if(lastDate!==yesterday)dailyStreak=0;}
 document.getElementById('streak-num').textContent=dailyStreak;
 function saveStreak(){if(lastDate!==today){dailyStreak++;lastDate=today;localStorage.setItem('vs',dailyStreak);localStorage.setItem('vd',today);document.getElementById('streak-num').textContent=dailyStreak;}}
 
 const sh=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
-function getPool(){if(examFocus)return sh(VOCAB.filter(v=>['A2','B1','B2','C1'].includes(v[4])));if(level==='all')return sh(VOCAB);return sh(VOCAB.filter(v=>v[4]===level));}
+function getPool(){
+  let base;
+  if(examFocus) base=VOCAB.filter(v=>['A2','B1','B2','C1'].includes(v[4]));
+  else if(level==='all') base=VOCAB;
+  else base=VOCAB.filter(v=>v[4]===level);
+  let due=srsDue().filter(v=>base.includes(v));
+  let newW=srsNew().filter(v=>base.includes(v));
+  let rest=base.filter(v=>!due.includes(v)&&!newW.includes(v));
+  let badge=document.getElementById('srs-badge');
+  if(badge) badge.textContent=due.length>0?'📚 ทบทวน '+due.length+' คำ':'✅ ครบแล้ว';
+  return [...sh(due),...sh(newW).slice(0,20),...sh(rest)];
+}
 const ltag=l=>`tg-${l.toLowerCase()}`;
 const upStats=()=>{document.getElementById('s-tot').textContent=pool.length;document.getElementById('s-kn').textContent=known.size;document.getElementById('s-st').textContent=combo;};
 const tagHtml=v=>`<span class="tag ${ltag(v[4])}">${v[4]}</span>`;
