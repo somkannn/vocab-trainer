@@ -231,7 +231,42 @@ function checkQ(btn,chosen,correct){if(qAns)return;qAns=true;document.querySelec
 function nextQuiz(){qIdx++;loadQuiz();}
 
 // SPEED
-function startSpeed(){let p=sh(getPool()).slice(0,20);let idx=0;function load(){if(idx>=p.length)return;let v=p[idx++];document.getElementById('sp-word').textContent=v[0];document.getElementById('sp-tags').innerHTML=tagHtml(v);let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let c=document.getElementById('sp-opts');c.innerHTML='';sh([v[2],...wrongs]).forEach(o=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>{if(o===v[2]){combo++;document.getElementById('sp-combo').textContent=combo+' ถูก';}else combo=0;upStats();load();};c.appendChild(b);});} document.getElementById('speed-start').style.display='none';document.getElementById('speed-play').classList.remove('hidden');load();}
+let spInterval=null;
+function startSpeed(){
+  if(spInterval)clearInterval(spInterval);
+  let secs=60;
+  document.getElementById('sp-timer').textContent=secs;
+  document.getElementById('speed-start').style.display='none';
+  document.getElementById('speed-play').classList.remove('hidden');
+  let p=sh(getPool());let idx=0;
+  function load(){
+    if(idx>=p.length)p=sh(getPool()),idx=0;
+    let v=p[idx++];
+    document.getElementById('sp-word').textContent=v[0];
+    if(document.getElementById('sp-tags'))document.getElementById('sp-tags').innerHTML=tagHtml(v);
+    let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);
+    let c=document.getElementById('sp-opts');c.innerHTML='';
+    sh([v[2],...wrongs]).forEach(o=>{
+      let b=document.createElement('button');b.className='opt';b.textContent=o;
+      b.onclick=()=>{
+        if(o===v[2]){combo++;document.getElementById('sp-combo').textContent=combo+' ถูก';}
+        else combo=0;
+        upStats();load();
+      };c.appendChild(b);
+    });
+  }
+  load();
+  spInterval=setInterval(()=>{
+    secs--;
+    document.getElementById('sp-timer').textContent=secs;
+    if(secs<=0){
+      clearInterval(spInterval);spInterval=null;
+      document.getElementById('sp-opts').innerHTML='';
+      document.getElementById('sp-word').textContent='⏰ หมดเวลา!';
+      document.getElementById('speed-start').style.display='block';
+    }
+  },1000);
+}
 
 // MATCH
 let mSelW=null,mSelD=null,mPairs=[],mDone=new Set();
