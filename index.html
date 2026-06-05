@@ -102,6 +102,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="switchMode('quiz')" id="tab-quiz"><span class="tab-icon">🧠</span><span>Quiz</span></button>
     <button class="tab" onclick="switchMode('speed')" id="tab-speed"><span class="tab-icon">⚡</span><span>Speed</span></button>
     <button class="tab" onclick="switchMode('match')" id="tab-match"><span class="tab-icon">🔗</span><span>Match</span></button>
+    <button class="tab" id="tab-cloze" onclick="switchMode('cloze')"><span class="tab-icon">✏️</span><span>Cloze</span></button>
   </div>
 
   <div class="lvls" id="lvl-row">
@@ -181,7 +182,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div id="mmsg" style="text-align:center;font-size:13px;color:var(--green);font-weight:600;min-height:20px;margin-bottom:.75rem;"></div>
     <button class="btno" onclick="startMatch()">🔀 ชุดใหม่</button>
+  
+  <!-- Cloze Mode -->
+  <div id="m-cloze" class="hidden">
+    <div style="text-align:center;margin-bottom:.75rem;">
+      <div id="cz-score" style="font-size:13px;color:var(--text2);margin-bottom:.5rem;">คะแนน: 0</div>
+      <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;"><div id="czp" style="height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .3s;"></div></div>
+      <div id="cz-sentence" style="font-size:17px;line-height:1.8;color:var(--text);background:var(--bg2);border-radius:var(--rs);padding:1.25rem;margin-bottom:1rem;min-height:60px;"></div>
+    </div>
+    <div id="cz-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    <div id="cz-feedback" style="text-align:center;font-size:13px;font-weight:600;min-height:20px;margin-top:.75rem;"></div>
+    <button class="btno" onclick="startCloze()" style="margin-top:.75rem;">🔀 ชุดใหม่</button>
   </div>
+</div>
 </div>
 
 <script src="data.js"></script>
