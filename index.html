@@ -244,7 +244,7 @@ function getPool(){
   let rest=base.filter(v=>!due.includes(v)&&!newW.includes(v));
   let badge=document.getElementById('srs-badge');
   if(badge) badge.textContent=due.length>0?'📚 ทบทวน '+due.length+' คำ':'✅ ครบแล้ว';
-  return [...sh(due),...sh(newW).slice(0,20),...sh(rest)];
+  return [...sh(due),...sh(newW),...sh(rest)];
 }
 const ltag=l=>`tg-${l.toLowerCase()}`;
 const upStats=()=>{document.getElementById('s-tot').textContent=pool.length;document.getElementById('s-kn').textContent=known.size;document.getElementById('s-st').textContent=combo;};
