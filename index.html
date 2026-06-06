@@ -240,11 +240,18 @@ function getPool(){
   else if(level==='all') base=VOCAB;
   else base=VOCAB.filter(v=>v[4]===level);
   let due=srsDue().filter(v=>base.includes(v));
-  let newW=srsNew().filter(v=>base.includes(v));
+  let newW=srsNew().filter(v=>base.includes(v)).slice(0,30);
   let rest=base.filter(v=>!due.includes(v)&&!newW.includes(v));
   let badge=document.getElementById('srs-badge');
   if(badge) badge.textContent=due.length>0?'📚 ทบทวน '+due.length+' คำ':'✅ ครบแล้ว';
-  return [...sh(due),...sh(newW),...sh(rest)];
+  // Mix due + new words (2 due, 1 new pattern)
+  let pool=[];
+  let dueArr=sh(due), newArr=sh(newW), restArr=sh(rest);
+  for(let i=0;i<Math.max(dueArr.length,newArr.length);i++){
+    if(i%3!==2 && dueArr[Math.floor(i/1.5)]){pool.push(dueArr[Math.floor(i/1.5)]);}
+    if(i%3===2 && newArr[i/3]){pool.push(newArr[Math.floor(i/3)]);}
+  }
+  return pool.length>0?pool:sh(base);
 }
 const ltag=l=>`tg-${l.toLowerCase()}`;
 const upStats=()=>{document.getElementById('s-tot').textContent=pool.length;document.getElementById('s-kn').textContent=known.size;document.getElementById('s-st').textContent=combo;};
