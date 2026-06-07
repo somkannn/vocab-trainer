@@ -190,6 +190,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;"><div id="czp" style="height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .3s;"></div></div>
       <div id="cz-sentence" style="font-size:17px;line-height:1.8;color:var(--text);background:var(--bg2);border-radius:var(--rs);padding:1.25rem;margin-bottom:1rem;min-height:60px;"></div>
     </div>
+    <div style="margin-bottom:.5rem;display:flex;gap:8px;">
+      <button class="btno" style="flex:1;font-size:12px;" onclick="czHint()" id="cz-hint-btn">💡 Hint</button>
+      <select id="cz-diff" style="padding:8px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg);color:var(--text);font-size:13px;">
+        <option value="easy">Easy (show length)</option>
+        <option value="medium" selected>Medium (1st letter)</option>
+        <option value="hard">Hard (no hints)</option>
+      </select>
+    </div>
     <div id="cz-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
     <div id="cz-feedback" style="text-align:center;font-size:13px;font-weight:600;min-height:20px;margin-top:.75rem;"></div>
     <button class="btno" onclick="startCloze()" style="margin-top:.75rem;">🔀 ชุดใหม่</button>
@@ -197,7 +205,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 
-<script src="data_v3.js"></script>
+<script src="data_v3.js">
+function czHint(){
+  if(czHintUsed) return;
+  czHintUsed=true;
+  let v=czList[czIdx];
+  let hint='';
+  if(czDiff==='easy') hint='Length: '+v[0].length+' letters';
+  else if(czDiff==='medium') hint='Starts with: '+v[0][0];
+  else hint='(no hint on hard mode)';
+  document.getElementById('cz-hint-btn').disabled=true;
+  document.getElementById('cz-hint-btn').style.opacity='0.5';
+  document.getElementById('cz-feedback').textContent='💡 '+hint;
+}
+</script>
 <script>
 const LEVELS=['A1','A2','B1','B2','C1'];
 let level='all', mode='flash', examFocus=false;
@@ -308,7 +329,8 @@ function nextCard(){idx=(idx+1)%pool.length;loadCard();}
 
 // QUIZ
 function startQuiz(){pool=getPool();qList=pool.slice(0,Math.min(15,pool.length));qIdx=0;qScore=0;document.getElementById('qbody').style.display='block';loadQuiz();}
-function loadQuiz(){if(qIdx>=qList.length)return;qAns=false;let v=qList[qIdx];document.getElementById('qw').textContent=v[0];document.getElementById('qtags').innerHTML=tagHtml(v);document.getElementById('qnx').style.display='none';document.getElementById('qp').style.width=Math.round(qIdx/qList.length*100)+'%';let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let opts=sh([v[2],...wrongs]);let c=document.getElementById('qopts');c.innerHTML='';opts.forEach(o=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>checkQ(b,o,v[2]);c.appendChild(b);});}
+function loadQuiz(){if(qIdx>=qList.length)return;qAns=false;let v=qList[qIdx];document.getElementById('qw').textContent=v[0];document.getElementById('qtags').innerHTML=tagHtml(v);document.getElementById('qnx').style.display='none';document.getElementById('qp').style.width=Math.round(qIdx/qList.length*100)+'%';let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let opts=sh([v[2],...wrongs]);let c=document.getElementById('qopts');c.innerHTML='';czTimer=setInterval(()=>{timeLeft--;document.querySelector('#cz-sentence small:first-of-type').textContent='⏱️ '+timeLeft+'s';if(timeLeft<=0){clearInterval(czTimer);document.getElementById('cz-opts').querySelectorAll('button').forEach(x=>x.disabled=true);document.getElementById('cz-feedback').innerHTML='❌ หมดเวลา! คำตอบคือ <b>'+v[0]+'</b> — '+v[2];combo=0;srsUpdate(v[0],false);upStats();setTimeout(()=>{czIdx++;loadCloze();},1500);}},1000);
+  opts.forEach(o=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>checkQ(b,o,v[2]);c.appendChild(b);});}
 function checkQ(btn,chosen,correct){if(qAns)return;qAns=true;document.querySelectorAll('#qopts .opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('ok');else if(b===btn)b.classList.add('ng');});if(chosen===correct){qScore++;combo++;saveStreak();}else combo=0;upStats();document.getElementById('qnx').style.display='block';}
 function nextQuiz(){qIdx++;loadQuiz();}
 
@@ -402,9 +424,11 @@ function setLevel(l){level=l;document.querySelectorAll('.lb').forEach(b=>b.class
 function toggleExam(){examFocus=document.getElementById('exam-toggle').checked;pool=getPool();idx=0;known=new Set();combo=0;switchMode(mode);}
 
 
-// ── Cloze Test ──
-let czList=[],czIdx=0,czScore=0;
+// ── Cloze Test v2 ──
+let czList=[],czIdx=0,czScore=0,czTimer,czDiff='medium',czHintUsed=false;
+const CZ_TIME={easy:12,medium:10,hard:8};
 function startCloze(){
+  czDiff=document.getElementById('cz-diff').value||'medium';
   czList=sh(getPool().filter(v=>v[3]&&v[3].toLowerCase().includes(v[0].toLowerCase()))).slice(0,15);
   czIdx=0;czScore=0;
   document.getElementById('cz-score').textContent='คะแนน: 0';
@@ -413,6 +437,7 @@ function startCloze(){
   loadCloze();
 }
 function loadCloze(){
+  if(czTimer) clearInterval(czTimer);
   if(czIdx>=czList.length){
     document.getElementById('cz-sentence').textContent='🎉 จบแล้ว! คะแนน '+czScore+'/'+czList.length;
     document.getElementById('cz-opts').innerHTML='';
@@ -421,13 +446,15 @@ function loadCloze(){
   }
   let v=czList[czIdx];
   let sent=v[3].replace(new RegExp(v[0],'i'),'_____');
-  document.getElementById('cz-sentence').innerHTML=sent+'<br><small style="color:var(--text2);font-size:11px;">'+v[1]+'</small>';
+  let timeDisplay='<small style="color:var(--accent);font-weight:700;">⏱️ '+timeLeft+'s</small>';
+  document.getElementById('cz-sentence').innerHTML=sent+'<br>'+timeDisplay+'<br><small style="color:var(--text2);font-size:11px;">'+v[1]+'</small>';
   document.getElementById('czp').style.width=Math.round(czIdx/czList.length*100)+'%';
   document.getElementById('cz-score').textContent='ข้อ '+(czIdx+1)+'/'+czList.length+' | คะแนน: '+czScore;
   document.getElementById('cz-feedback').textContent='';
   let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[0]);
   let opts=sh([v[0],...wrongs]);
   let c2=document.getElementById('cz-opts');c2.innerHTML='';
+  czTimer=setInterval(()=>{timeLeft--;document.querySelector('#cz-sentence small:first-of-type').textContent='⏱️ '+timeLeft+'s';if(timeLeft<=0){clearInterval(czTimer);document.getElementById('cz-opts').querySelectorAll('button').forEach(x=>x.disabled=true);document.getElementById('cz-feedback').innerHTML='❌ หมดเวลา! คำตอบคือ <b>'+v[0]+'</b> — '+v[2];combo=0;srsUpdate(v[0],false);upStats();setTimeout(()=>{czIdx++;loadCloze();},1500);}},1000);
   opts.forEach(o=>{
     let b=document.createElement('button');b.className='opt';b.textContent=o;
     b.onclick=()=>{
@@ -450,6 +477,19 @@ function loadCloze(){
 }
 
 pool=getPool();upStats();loadCard();
+
+function czHint(){
+  if(czHintUsed) return;
+  czHintUsed=true;
+  let v=czList[czIdx];
+  let hint='';
+  if(czDiff==='easy') hint='Length: '+v[0].length+' letters';
+  else if(czDiff==='medium') hint='Starts with: '+v[0][0];
+  else hint='(no hint on hard mode)';
+  document.getElementById('cz-hint-btn').disabled=true;
+  document.getElementById('cz-hint-btn').style.opacity='0.5';
+  document.getElementById('cz-feedback').textContent='💡 '+hint;
+}
 </script>
 </body>
 </html>
