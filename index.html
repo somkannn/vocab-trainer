@@ -500,24 +500,6 @@ function loadCloze(){
   cc.parentElement.insertBefore(hint,cc);
 }
 function nextCloze(){czIdx++;loadCloze();}
-  opts.forEach(o=>{
-    let b=document.createElement('button');b.className='opt';b.textContent=o;
-    b.onclick=()=>{
-      c2.querySelectorAll('button').forEach(x=>x.disabled=true);
-      if(o===v[0]){
-        b.style.background='var(--gbg)';b.style.borderColor='var(--gborder)';
-        czScore++;combo++;saveStreak();srsUpdate(v[0],true);
-        document.getElementById('cz-feedback').innerHTML='✅ ถูกต้อง! <span style="color:var(--text2)">'+v[2]+'</span>';
-      } else {
-        b.style.background='var(--rbg)';b.style.borderColor='var(--rborder)';
-        c2.querySelectorAll('button').forEach(x=>{if(x.textContent===v[0]){x.style.background='var(--gbg)';x.style.borderColor='var(--gborder)';}});
-        combo=0;srsUpdate(v[0],false);
-        document.getElementById('cz-feedback').innerHTML='❌ คำตอบคือ <b>'+v[0]+'</b> ('+v[2]+')';
-      }
-      upStats();
-      setTimeout(()=>{czIdx++;loadCloze();},1200);
-    };
-    c2.appendChild(b);
   });
 }
 
