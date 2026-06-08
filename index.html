@@ -500,7 +500,6 @@ function loadCloze(){
   cc.parentElement.insertBefore(hint,cc);
 }
 function nextCloze(){czIdx++;loadCloze();}
-dx++;loadCloze();},1500);}},1000);
   opts.forEach(o=>{
     let b=document.createElement('button');b.className='opt';b.textContent=o;
     b.onclick=()=>{
