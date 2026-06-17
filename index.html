@@ -32,6 +32,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .lb{padding:5px 12px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text2);font-weight:500;transition:all .15s;}
 .lb.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .lb-a2.on{background:#1d4ed8;border-color:#1d4ed8;}.lb-b1.on{background:#c2410c;border-color:#c2410c;}.lb-b2.on{background:#be123c;border-color:#be123c;}.lb-c1.on{background:#7e22ce;border-color:#7e22ce;}
+.daily-set-row{margin-bottom:1rem;padding:10px 14px;background:var(--bg2);border-radius:12px;}
+.daily-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;font-size:11px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .15s;}
+.daily-btn:hover{border-color:var(--border2);background:var(--bg3);}
+.daily-btn.on{background:#8b5cf6;color:#fff;border-color:#8b5cf6;font-weight:600;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem;}
 .st{background:var(--bg2);border-radius:var(--rs);padding:10px;text-align:center;}.st-n{font-size:22px;font-weight:700;}.st-l{font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px;}
 .pg{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:1.25rem;overflow:hidden;}.pgb{height:3px;background:var(--text);border-radius:2px;transition:width .4s;}
@@ -112,6 +116,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="lb lb-b1" onclick="setLevel('B1')">B1</button>
     <button class="lb lb-b2" onclick="setLevel('B2')">B2</button>
     <button class="lb lb-c1" onclick="setLevel('C1')">C1</button>
+  </div>
+
+  <div class="daily-set-row">
+    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text2);">📅 Daily Set</div>
+    <div id="daily-set-container" style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;max-height:120px;overflow-y:auto;">
+    </div>
   </div>
 
   <div class="stats">
@@ -222,7 +232,7 @@ function czHint(){
 <script>
 const LEVELS=['A1','A2','B1','B2','C1'];
 let level='all', mode='flash', examFocus=false;
-let pool=[], idx=0, known=new Set(), combo=0, flipped=false;
+let pool=[], idx=0, known=new Set(), combo=0, flipped=false, currentDailySet=0, mode='flash';
 let qList=[], qIdx=0, qScore=0, qAns=false;
 
 let dailyStreak=parseInt(localStorage.getItem('vs'))||0;
@@ -256,10 +266,16 @@ function saveStreak(){if(lastDate!==today){dailyStreak++;lastDate=today;localSto
 
 const sh=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
 function getPool(){
+  let vocabSource=VOCAB;
+  if(currentDailySet>0){
+    let startIdx=(currentDailySet-1)*30;
+    let endIdx=currentDailySet*30;
+    vocabSource=VOCAB.slice(startIdx,endIdx);
+  }
   let base;
-  if(examFocus) base=VOCAB.filter(v=>['A2','B1','B2','C1'].includes(v[4]));
-  else if(level==='all') base=VOCAB;
-  else base=VOCAB.filter(v=>v[4]===level);
+  if(examFocus) base=vocabSource.filter(v=>['A2','B1','B2','C1'].includes(v[4]));
+  else if(level==='all') base=vocabSource;
+  else base=vocabSource.filter(v=>v[4]===level);
   let due=srsDue().filter(v=>base.includes(v));
   let newW=srsNew().filter(v=>base.includes(v)).slice(0,30);
   let rest=base.filter(v=>!due.includes(v)&&!newW.includes(v));
@@ -421,6 +437,7 @@ function tryMatch(){
 // MODE
 function switchMode(m){mode=m;['flash','quiz','speed','match','cloze'].forEach(x=>document.getElementById('m-'+x).classList.toggle('hidden',x!==m));['flash','quiz','speed','match','cloze'].forEach(x=>document.getElementById('tab-'+x)?.classList.toggle('on',x===m));if(m==='flash'){pool=getPool();idx=0;loadCard();}else if(m==='quiz')startQuiz();else if(m==='speed'){document.getElementById('speed-start').style.display='block';document.getElementById('speed-play').classList.add('hidden');}else if(m==='match')startMatch();else if(m==='cloze')startCloze();}
 function setLevel(l){level=l;document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));event.target.classList.add('on');known=new Set();combo=0;switchMode(mode);}
+function setDailySet(day){currentDailySet=day;document.querySelectorAll('.daily-btn').forEach(b=>b.classList.remove('on'));if(day>0) document.querySelectorAll('.daily-btn')[day].classList.add('on');else document.querySelectorAll('.daily-btn')[0].classList.add('on');idx=0;known=new Set();combo=0;pool=getPool();upStats();switchMode(mode);}
 function toggleExam(){examFocus=document.getElementById('exam-toggle').checked;pool=getPool();idx=0;known=new Set();combo=0;switchMode(mode);}
 
 
@@ -500,6 +517,18 @@ function loadCloze(){
   cc.parentElement.insertBefore(hint,cc);
 }
 function nextCloze(){czIdx++;loadCloze();}
+// Initialize daily set buttons
+(function(){
+  let container=document.getElementById('daily-set-container');
+  let btn=document.createElement('button');
+  btn.className='daily-btn on';btn.textContent='ทั้งหมด';btn.onclick=()=>setDailySet(0);
+  container.appendChild(btn);
+  for(let i=1;i<=30;i++){
+    let btn=document.createElement('button');
+    btn.className='daily-btn';btn.textContent='Day '+i;btn.onclick=()=>setDailySet(i);
+    container.appendChild(btn);
+  }
+})();
 pool=getPool();upStats();loadCard();
 
 function czHint(){
