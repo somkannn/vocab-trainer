@@ -215,7 +215,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 
-<script src="data_v4.js?v=2026-06-19">
+<script src="data_v3.js">
 // Wait for VOCAB with timeout fallback
 const vocabCheck = setInterval(()=>{
   if(typeof VOCAB !== "undefined"){
@@ -545,6 +545,7 @@ function nextCloze(){czIdx++;loadCloze();}
     container.appendChild(btn);
   }
 })();
+pool=getPool();upStats();loadCard();
 
 function czHint(){
   if(czHintUsed) return;
