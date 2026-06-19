@@ -232,7 +232,7 @@ function czHint(){
 <script>
 const LEVELS=['A1','A2','B1','B2','C1'];
 let level='all', mode='flash', examFocus=false;
-let pool=[], idx=0, known=new Set(), combo=0, flipped=false, currentDailySet=0, mode='flash';
+let pool=[], idx=0, known=new Set(), combo=0, flipped=false, currentDailySet=0;
 let qList=[], qIdx=0, qScore=0, qAns=false;
 
 let dailyStreak=parseInt(localStorage.getItem('vs'))||0;
@@ -345,7 +345,7 @@ function nextCard(){idx=(idx+1)%pool.length;loadCard();}
 
 // QUIZ
 function startQuiz(){pool=getPool();qList=pool.slice(0,Math.min(15,pool.length));qIdx=0;qScore=0;document.getElementById('qbody').style.display='block';loadQuiz();}
-function loadQuiz(){if(qIdx>=qList.length)return;qAns=false;let v=qList[qIdx];document.getElementById('qw').textContent=v[0];document.getElementById('qtags').innerHTML=tagHtml(v);document.getElementById('qnx').style.display='none';document.getElementById('qp').style.width=Math.round(qIdx/qList.length*100)+'%';let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let opts=sh([v[2],...wrongs]);let c=document.getElementById('qopts');c.innerHTML='';
+function loadQuiz(){if(qIdx>=qList.length)return;qAns=false;let v=qList[qIdx];document.getElementById('qw').textContent=v[0];document.getElementById('qtags').innerHTML=tagHtml(v);document.getElementById('qnx').style.display='none';document.getElementById('qp').style.width=Math.round(qIdx/qList.length*100)+'%';let wrongs=sh(VOCAB.filter(x=>x[0]!==v[0])).slice(0,3).map(x=>x[2]);let opts=sh([v[2],...wrongs]);let c=document.getElementById('qopts');c.innerHTML='';czTimer=setInterval(()=>{timeLeft--;document.querySelector('#cz-sentence small:first-of-type').textContent='⏱️ '+timeLeft+'s';if(timeLeft<=0){clearInterval(czTimer);document.getElementById('cz-opts').querySelectorAll('button').forEach(x=>x.disabled=true);document.getElementById('cz-feedback').innerHTML='❌ หมดเวลา! คำตอบคือ <b>'+v[0]+'</b> — '+v[2];combo=0;srsUpdate(v[0],false);upStats();setTimeout(()=>{czIdx++;loadCloze();},1500);}},1000);
   opts.forEach(o=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>checkQ(b,o,v[2]);c.appendChild(b);});}
 function checkQ(btn,chosen,correct){if(qAns)return;qAns=true;document.querySelectorAll('#qopts .opt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('ok');else if(b===btn)b.classList.add('ng');});if(chosen===correct){qScore++;combo++;saveStreak();}else combo=0;upStats();document.getElementById('qnx').style.display='block';}
 function nextQuiz(){qIdx++;loadQuiz();}
