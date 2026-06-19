@@ -529,7 +529,8 @@ function nextCloze(){czIdx++;loadCloze();}
     container.appendChild(btn);
   }
 })();
-pool=getPool();upStats();loadCard();
+// Initialize when VOCAB is loaded
+window.addEventListener("load",()=>{if(typeof VOCAB!=="undefined"){pool=getPool();upStats();loadCard();}});
 
 function czHint(){
   if(czHintUsed) return;
